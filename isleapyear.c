@@ -5,7 +5,7 @@
 int isLeapYear(int year);
 
 int main(int argc, char *argv[]) {
-    char year[4];
+    char year[30];
     char output_str[30];
     scanf("%s", year);  
     int year_in_num = atoi(year);
