@@ -1,14 +1,15 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 int isLeapYear(int year);
 
 int main(int argc, char *argv[]) {
-    int year;
+    char year[] = "";
     printf("Enter an year: ");
-    scanf("%d", &year);  
-    int isLeap = isLeapYear(year);
-    printf(isLeap == 0 ? "%d was not a leap year" : "%d was a leap year", year);
+    scanf("%[^\n]%*c", year);  
+    int isLeap = isLeapYear(atoi(year));
+    printf(isLeap == 0 ? "%s was not a leap year" : "%s was a leap year", year);
 }
 
 int isLeapYear(int year) {
