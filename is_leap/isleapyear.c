@@ -5,13 +5,9 @@
 int isLeapYear(int year);
 
 int main(int argc, char *argv[]) {
-    char year[30];
     char output_str[30];
-    scanf("%s", year);  
-    int year_in_num = atoi(year);
-    int isLeap = isLeapYear(year_in_num);
-    sprintf(output_str, isLeap == 0 ? "%d was not a leap year" : "%d was a leap year", year_in_num);
-    printf("%s", output_str);
+    int isLeap = isLeapYear(atoi(argv[1]));
+    printf(isLeap == 0 ? "%s was not a leap year" : "%s was a leap year", argv[1]);
 }
 
 int isLeapYear(int year) {
