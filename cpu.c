@@ -1,8 +1,12 @@
-#include "./oslab.h"
+#include "oslab.h"
 #include <stdlib.h>
 struct PCB NULLPCB = {0, 0, 0, 0, 0, 0, 0};
 
 void remove_pcb(struct PCB array[], int index, int array_length);
+
+int main(int argc, char *argv[]) {
+    return 0;
+}
 
 // Priority-based Preemptive Scheduler
 struct PCB handle_process_arrival_pp(struct PCB ready_queue[QUEUEMAX], int *queue_cnt, struct PCB current_process, struct PCB new_process, int timestamp)
@@ -32,6 +36,7 @@ struct PCB handle_process_arrival_pp(struct PCB ready_queue[QUEUEMAX], int *queu
         ready_queue[*queue_cnt] = current_process;
         new_process.execution_starttime = timestamp;
         new_process.execution_endtime = timestamp + new_process.total_bursttime;
+        return new_process;
     }
 }
 
@@ -87,6 +92,7 @@ struct PCB handle_process_arrival_srtp(struct PCB ready_queue[QUEUEMAX], int *qu
         current_process.execution_endtime = 0;
         current_process.remaining_bursttime = current_process.total_bursttime - time_stamp;
         ready_queue[*queue_cnt] = current_process;
+        return new_process;
     }
 }
 
