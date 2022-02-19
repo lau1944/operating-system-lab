@@ -7,7 +7,7 @@ A operating system school project repo
 
 * [ Project 2 : is Leap Year ](/is_leap)
 
-* [ Project 3 : CPU schedule ](/cpu_schedule)
+* [ Project 3 : CPU schedule ](/process)
 
 
 # How to run
