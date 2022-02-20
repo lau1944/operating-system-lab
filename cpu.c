@@ -17,15 +17,22 @@ int is_null_pcb(struct PCB process);
 // }
 
 // int main(int argc, char *argv[]) {
-//     int i = 0;
+//     int i = 2;
 //     struct PCB current_process = {1, 1, 4, 1, 5, 4, 8};
 //     struct PCB new_process = {2,2,3,0,0,3,6};
 //     struct PCB ready_queue[QUEUEMAX];
-//     handle_process_arrival_pp(ready_queue, &i, current_process, new_process, 2);
+//     ready_queue[0] = current_process;
+//     ready_queue[1] = new_process;
+//     handle_process_completion_pp(ready_queue, &i, 4);
+//     int count = 0;
+//     for (int i = 0; i < 2; i++) {
+//         if (&ready_queue[i] != NULL) {
+//             count++;
+//         }
+//     }
+//     printf("%d", count);
 // }
 
-// [PID:1, AT:1, TBT:4, EST:1, EET:5, RBT:4, Priority:8]
-// [PID:2, AT:2, TBT:3, EST:0, EET:0, RBT:3, Priority:6]
 // Priority-based Preemptive Scheduler
 struct PCB handle_process_arrival_pp(struct PCB ready_queue[QUEUEMAX], int *queue_cnt, struct PCB current_process, struct PCB new_process, int timestamp)
 {
@@ -80,8 +87,7 @@ struct PCB handle_process_completion_pp(struct PCB ready_queue[QUEUEMAX], int *q
         }
     }
     // remove from ready queue
-    remove_pcb(&ready_queue, high_process_index, *queue_cnt);
-    --(*queue_cnt);
+    remove_pcb(&ready_queue, high_process_index, *queue_cnt--);
     high_priority_process.execution_starttime = timestamp;
     high_priority_process.execution_endtime = timestamp + high_priority_process.remaining_bursttime;
     return high_priority_process;
@@ -141,8 +147,7 @@ struct PCB handle_process_completion_srtp(struct PCB ready_queue[QUEUEMAX], int 
         }
     }
     // remove from ready queue
-    remove_pcb(&ready_queue, short_remain_time_process_index, *queue_cnt);
-    --(*queue_cnt);
+    remove_pcb(&ready_queue, short_remain_time_process_index, *queue_cnt--);
     short_remain_time_process.execution_starttime = timestamp;
     short_remain_time_process.execution_endtime = timestamp + short_remain_time_process.remaining_bursttime;
     return short_remain_time_process;
@@ -187,8 +192,7 @@ struct PCB handle_process_completion_rr(struct PCB ready_queue[QUEUEMAX], int *q
         }
     }
     // remove from ready queue
-    remove_pcb(&ready_queue, early_arrive_time_process_index, *queue_cnt);
-    --(*queue_cnt);
+    remove_pcb(&ready_queue, early_arrive_time_process_index, *queue_cnt--);
     early_arrive_time_process.execution_starttime = timestamp;
     early_arrive_time_process.execution_endtime = timestamp + early_arrive_time_process.remaining_bursttime;
     return early_arrive_time_process;
@@ -214,9 +218,12 @@ int is_null_pcb(struct PCB process)
 // remove pcb from ready queue
 void remove_pcb(struct PCB *array[], int index, int array_length)
 {
-    for (int i = index; i < array_length - 1; i++)
+    array[index] = NULL;
+    for (int i = index; i < array_length; i++)
     {
+        // swap
+        struct PCB buf = (*array[i]);
         array[i] = array[i + 1];
+        (*array[i+1]) = buf;
     }
-    array[array_length - 1] = NULL;
 }
