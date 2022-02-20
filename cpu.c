@@ -199,7 +199,7 @@ int is_empty_queue(struct PCB queue[QUEUEMAX])
 {
     for (int i = 0; i < QUEUEMAX; ++i)
     {
-        if (!is_null_pcb(queue[i]))
+        if (&queue[i] == NULL)
         {
             return 0;
         }
@@ -215,7 +215,7 @@ int is_null_pcb(struct PCB process)
 // remove pcb from ready queue
 void remove_pcb(struct PCB array[QUEUEMAX], int index, int array_length)
 {
-    for (int i = index; i < QUEUEMAX; ++i)
+    for (int i = index; i < QUEUEMAX - 1; ++i)
     {
         array[i] = array[i + 1];
     }
