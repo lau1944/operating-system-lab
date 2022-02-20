@@ -16,13 +16,13 @@ int is_null_pcb(struct PCB process);
 //     return *u;
 // }
 
-int main(int argc, char *argv[]) {
-    int i = 0;
-    struct PCB current_process = {1, 1, 4, 1, 5, 4, 8};
-    struct PCB new_process = {2,2,3,0,0,3,6};
-    struct PCB ready_queue[QUEUEMAX];
-    handle_process_arrival_pp(ready_queue, &i, current_process, new_process, 2);
-}
+// int main(int argc, char *argv[]) {
+//     int i = 0;
+//     struct PCB current_process = {1, 1, 4, 1, 5, 4, 8};
+//     struct PCB new_process = {2,2,3,0,0,3,6};
+//     struct PCB ready_queue[QUEUEMAX];
+//     handle_process_arrival_pp(ready_queue, &i, current_process, new_process, 2);
+// }
 
 // [PID:1, AT:1, TBT:4, EST:1, EET:5, RBT:4, Priority:8]
 // [PID:2, AT:2, TBT:3, EST:0, EET:0, RBT:3, Priority:6]
@@ -47,8 +47,6 @@ struct PCB handle_process_arrival_pp(struct PCB ready_queue[QUEUEMAX], int *queu
         new_process.remaining_bursttime = new_process.total_bursttime;
         ready_queue[size] = new_process;
         ++(*queue_cnt);
-        int size1 = *queue_cnt;
-        printf("%d", size1);
         return current_process;
     }
     else
