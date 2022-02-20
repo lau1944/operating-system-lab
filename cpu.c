@@ -191,6 +191,7 @@ struct PCB handle_process_completion_rr(struct PCB ready_queue[QUEUEMAX], int *q
     }
     // remove from ready queue
     remove_pcb(ready_queue, early_arrive_time_process_index, *queue_cnt--);
+    (*queue_cnt)--;
     early_arrive_time_process.execution_starttime = timestamp;
     early_arrive_time_process.execution_endtime = timestamp + early_arrive_time_process.remaining_bursttime;
     return early_arrive_time_process;
@@ -200,7 +201,7 @@ int is_empty_queue(struct PCB queue[QUEUEMAX])
 {
     for (int i = 0; i < QUEUEMAX; ++i)
     {
-        if (&queue[i] == NULL || is_null_pcb(queue[i]))
+        if ((&queue)[i] == NULL || is_null_pcb(queue[i]))
         {
             return 0;
         }
