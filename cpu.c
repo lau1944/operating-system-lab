@@ -1,14 +1,27 @@
 #include "oslabs.h"
 #include <stdlib.h>
+#include <stdio.h>
 struct PCB NULLPCB = {0, 0, 0, 0, 0, 0, 0};
 
 void remove_pcb(struct PCB array[], int index, int array_length);
 
+int is_null_pcb(struct PCB process);
+
+int main(int argc, char *argv[]) {
+    struct PCB current_process = {1, 1, 4, 1, 5, 4, 8};
+    struct PCB new_process = {2,2,3,0,0,3,6};
+    struct PCB ready_queue[QUEUEMAX];
+    handle_process_arrival_pp(ready_queue, 0, current_process, new_process, 2);
+}
+
+// [PID:1, AT:1, TBT:4, EST:1, EET:5, RBT:4, Priority:8]
+// [PID:2, AT:2, TBT:3, EST:0, EET:0, RBT:3, Priority:6]
 // Priority-based Preemptive Scheduler
 struct PCB handle_process_arrival_pp(struct PCB ready_queue[QUEUEMAX], int *queue_cnt, struct PCB current_process, struct PCB new_process, int timestamp)
 {
+    int size = queue_cnt;
     // No current process
-    if (&current_process == &NULLPCB)
+    if (is_null_pcb(current_process))
     {
         new_process.execution_starttime = timestamp;
         new_process.execution_endtime = timestamp + new_process.total_bursttime;
@@ -22,14 +35,14 @@ struct PCB handle_process_arrival_pp(struct PCB ready_queue[QUEUEMAX], int *queu
         new_process.execution_endtime = 0;
         new_process.execution_starttime = 0;
         new_process.remaining_bursttime = new_process.total_bursttime;
-        ready_queue[*queue_cnt] = new_process;
+        ready_queue[size] = new_process;
         return current_process;
     }
     else
     {
         current_process.execution_endtime = 0;
         current_process.remaining_bursttime = timestamp - current_process.execution_starttime;
-        ready_queue[*queue_cnt] = current_process;
+        ready_queue[size] = current_process;
         new_process.execution_starttime = timestamp;
         new_process.execution_endtime = timestamp + new_process.total_bursttime;
         return new_process;
@@ -63,7 +76,8 @@ struct PCB handle_process_completion_pp(struct PCB ready_queue[QUEUEMAX], int *q
 //  the arrival of a new process in a Shortest-Remaining-Time-Next Preemptive Scheduler
 struct PCB handle_process_arrival_srtp(struct PCB ready_queue[QUEUEMAX], int *queue_cnt, struct PCB current_process, struct PCB new_process, int time_stamp)
 {
-    if (&current_process == &NULLPCB)
+    int size = queue_cnt;
+    if (is_null_pcb(current_process))
     {
         new_process.execution_starttime = time_stamp;
         new_process.execution_endtime = time_stamp + new_process.total_bursttime;
@@ -76,7 +90,7 @@ struct PCB handle_process_arrival_srtp(struct PCB ready_queue[QUEUEMAX], int *qu
         new_process.execution_starttime = 0;
         new_process.execution_endtime = 0;
         new_process.remaining_bursttime = new_process.total_bursttime;
-        ready_queue[*queue_cnt] = new_process;
+        ready_queue[size] = new_process;
         return new_process;
     }
     else
@@ -87,7 +101,7 @@ struct PCB handle_process_arrival_srtp(struct PCB ready_queue[QUEUEMAX], int *qu
         current_process.execution_starttime = 0;
         current_process.execution_endtime = 0;
         current_process.remaining_bursttime = current_process.total_bursttime - time_stamp;
-        ready_queue[*queue_cnt] = current_process;
+        ready_queue[size] = current_process;
         return new_process;
     }
 }
@@ -116,7 +130,8 @@ struct PCB handle_process_completion_srtp(struct PCB ready_queue[QUEUEMAX], int 
 
 //  the arrival of a new process in a Round-Robin Scheduler
 struct PCB handle_process_arrival_rr(struct PCB ready_queue[QUEUEMAX], int *queue_cnt, struct PCB current_process, struct PCB new_process, int timestamp, int time_quantum) {
-    if (&current_process == &NULLPCB)
+     int size = queue_cnt;
+    if (is_null_pcb(current_process))
     {
         new_process.execution_starttime = timestamp;
         new_process.execution_endtime = timestamp + new_process.total_bursttime;
@@ -124,7 +139,7 @@ struct PCB handle_process_arrival_rr(struct PCB ready_queue[QUEUEMAX], int *queu
         return new_process;
     }
 
-    ready_queue[*queue_cnt] = current_process;
+    ready_queue[size] = current_process;
     current_process.execution_starttime = 0;
     current_process.execution_endtime = 0;
     current_process.remaining_bursttime = current_process.total_bursttime;
@@ -151,6 +166,16 @@ struct PCB handle_process_completion_rr(struct PCB ready_queue[QUEUEMAX], int *q
     early_arrive_time_process.execution_starttime = timestamp;
     early_arrive_time_process.execution_endtime = timestamp + early_arrive_time_process.remaining_bursttime;
     return early_arrive_time_process;
+}
+
+int is_null_pcb(struct PCB process) {
+    return process.arrival_timestamp    == NULLPCB.arrival_timestamp 
+        && process.execution_endtime    == NULLPCB.execution_endtime
+        && process.execution_starttime  == NULLPCB.execution_starttime
+        && process.process_id           == NULLPCB.process_id
+        && process.process_priority     == NULLPCB.process_priority
+        && process.remaining_bursttime  == NULLPCB.remaining_bursttime
+        && process.total_bursttime      == NULLPCB.total_bursttime;
 }
 
 // remove pcb from ready queue
