@@ -224,4 +224,5 @@ void remove_pcb(struct PCB array[], int index, int array_length)
     {
         array[i] = array[i+1];
     }
+    (&array)[array_length - 1] = NULL;
 }
