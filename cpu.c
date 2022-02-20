@@ -215,8 +215,9 @@ int is_null_pcb(struct PCB process)
 // remove pcb from ready queue
 void remove_pcb(struct PCB *array[], int index, int array_length)
 {
-    for (int i = index; i < array_length - 1; ++i)
-    {
-        array[i] = array[i + 1];
-    }
+    array[index] = NULL;
+    // for (int i = index; i < array_length - 1; ++i)
+    // {
+    //     array[i] = array[i + 1];
+    // }
 }
