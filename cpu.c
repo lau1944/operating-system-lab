@@ -69,7 +69,7 @@ struct PCB handle_process_arrival_pp(struct PCB ready_queue[QUEUEMAX], int *queu
 //  the completion of execution of a process in a Priority-based Preemptive Scheduler
 struct PCB handle_process_completion_pp(struct PCB ready_queue[QUEUEMAX], int *queue_cnt, int timestamp)
 {
-    if (&ready_queue[0] == NULL || is_null_pcb(ready_queue[0]))
+    if (is_null_pcb(ready_queue[0]))
         return NULLPCB;
 
     // find the largest priority PCB
@@ -127,7 +127,7 @@ struct PCB handle_process_arrival_srtp(struct PCB ready_queue[QUEUEMAX], int *qu
 //  the completion of execution of a process in a Shortest-Remaining-Time Preemptive Scheduler
 struct PCB handle_process_completion_srtp(struct PCB ready_queue[QUEUEMAX], int *queue_cnt, int timestamp)
 {
-    if (&ready_queue[0] == NULL || is_null_pcb(ready_queue[0]))
+    if (is_null_pcb(ready_queue[0]))
         return NULLPCB;
 
     // find the shortest remain time process
@@ -171,7 +171,7 @@ struct PCB handle_process_arrival_rr(struct PCB ready_queue[QUEUEMAX], int *queu
 // the completion of execution of a process in a Round-Robin Scheduler
 struct PCB handle_process_completion_rr(struct PCB ready_queue[QUEUEMAX], int *queue_cnt, int timestamp, int time_quantum)
 {
-    if (&ready_queue[0] == NULL || is_null_pcb(ready_queue[0]))
+    if (is_null_pcb(ready_queue[0]))
         return NULLPCB;
 
     // find the early arrival time process
