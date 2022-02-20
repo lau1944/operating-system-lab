@@ -12,12 +12,12 @@ u_int64_t PointerToInt(void* ptr){
     return *u;
 }
 
-int main(int argc, char *argv[]) {
-    struct PCB current_process = {1, 1, 4, 1, 5, 4, 8};
-    struct PCB new_process = {2,2,3,0,0,3,6};
-    struct PCB ready_queue[QUEUEMAX];
-    handle_process_arrival_pp(ready_queue, 0, current_process, new_process, 2);
-}
+// int main(int argc, char *argv[]) {
+//     struct PCB current_process = {1, 1, 4, 1, 5, 4, 8};
+//     struct PCB new_process = {2,2,3,0,0,3,6};
+//     struct PCB ready_queue[QUEUEMAX];
+//     handle_process_arrival_pp(ready_queue, 0, current_process, new_process, 2);
+// }
 
 // [PID:1, AT:1, TBT:4, EST:1, EET:5, RBT:4, Priority:8]
 // [PID:2, AT:2, TBT:3, EST:0, EET:0, RBT:3, Priority:6]
