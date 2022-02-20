@@ -3,7 +3,7 @@
 #include <stdio.h>
 struct PCB NULLPCB = {0, 0, 0, 0, 0, 0, 0};
 
-void remove_pcb(struct PCB array[QUEUEMAX], int index, int array_length);
+void remove_pcb(struct PCB *array[], int index, int array_length);
 
 int is_empty_queue(struct PCB queue[QUEUEMAX]);
 
@@ -87,7 +87,7 @@ struct PCB handle_process_completion_pp(struct PCB ready_queue[QUEUEMAX], int *q
         }
     }
     // remove from ready queue
-    remove_pcb(ready_queue, max_process_index, size);
+    remove_pcb(ready_queue, max_process_index, QUEUEMAX);
     max_priority_process.execution_starttime = timestamp;
     max_priority_process.execution_endtime = timestamp + max_priority_process.remaining_bursttime;
     return max_priority_process;
@@ -145,7 +145,7 @@ struct PCB handle_process_completion_srtp(struct PCB ready_queue[QUEUEMAX], int 
         }
     }
     // remove from ready queue
-    remove_pcb(ready_queue, short_remain_time_process_index, size);
+    remove_pcb(ready_queue, short_remain_time_process_index, QUEUEMAX);
     short_remain_time_process.execution_starttime = timestamp;
     short_remain_time_process.execution_endtime = timestamp + short_remain_time_process.remaining_bursttime;
     return short_remain_time_process;
@@ -189,7 +189,7 @@ struct PCB handle_process_completion_rr(struct PCB ready_queue[QUEUEMAX], int *q
         }
     }
     // remove from ready queue
-    remove_pcb(ready_queue, early_arrive_time_process_index, size);
+    remove_pcb(ready_queue, early_arrive_time_process_index, QUEUEMAX);
     early_arrive_time_process.execution_starttime = timestamp;
     early_arrive_time_process.execution_endtime = timestamp + early_arrive_time_process.remaining_bursttime;
     return early_arrive_time_process;
@@ -199,7 +199,7 @@ int is_empty_queue(struct PCB queue[QUEUEMAX])
 {
     for (int i = 0; i < QUEUEMAX; ++i)
     {
-        if (&queue[i] == NULL)
+        if (&queue[i] == NULL || is_null_pcb(queue[i]))
         {
             return 0;
         }
@@ -213,9 +213,9 @@ int is_null_pcb(struct PCB process)
 }
 
 // remove pcb from ready queue
-void remove_pcb(struct PCB array[QUEUEMAX], int index, int array_length)
+void remove_pcb(struct PCB *array[], int index, int array_length)
 {
-    for (int i = index; i < QUEUEMAX - 1; ++i)
+    for (int i = index; i < array_length - 1; ++i)
     {
         array[i] = array[i + 1];
     }
