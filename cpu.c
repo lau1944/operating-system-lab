@@ -7,19 +7,19 @@ void remove_pcb(struct PCB array[], int index, int array_length);
 
 int is_null_pcb(struct PCB process);
 
-int main(int argc, char *argv[]) {
-    struct PCB current_process = {1, 1, 4, 1, 5, 4, 8};
-    struct PCB new_process = {2,2,3,0,0,3,6};
-    struct PCB ready_queue[QUEUEMAX];
-    handle_process_arrival_pp(ready_queue, 0, current_process, new_process, 2);
-}
+// int main(int argc, char *argv[]) {
+//     struct PCB current_process = {1, 1, 4, 1, 5, 4, 8};
+//     struct PCB new_process = {2,2,3,0,0,3,6};
+//     struct PCB ready_queue[QUEUEMAX];
+//     handle_process_arrival_pp(ready_queue, 0, current_process, new_process, 2);
+// }
 
 // [PID:1, AT:1, TBT:4, EST:1, EET:5, RBT:4, Priority:8]
 // [PID:2, AT:2, TBT:3, EST:0, EET:0, RBT:3, Priority:6]
 // Priority-based Preemptive Scheduler
 struct PCB handle_process_arrival_pp(struct PCB ready_queue[QUEUEMAX], int *queue_cnt, struct PCB current_process, struct PCB new_process, int timestamp)
 {
-    int size = queue_cnt;
+    int size = *queue_cnt;
     // No current process
     if (is_null_pcb(current_process))
     {
@@ -76,7 +76,7 @@ struct PCB handle_process_completion_pp(struct PCB ready_queue[QUEUEMAX], int *q
 //  the arrival of a new process in a Shortest-Remaining-Time-Next Preemptive Scheduler
 struct PCB handle_process_arrival_srtp(struct PCB ready_queue[QUEUEMAX], int *queue_cnt, struct PCB current_process, struct PCB new_process, int time_stamp)
 {
-    int size = queue_cnt;
+    int size = *queue_cnt;
     if (is_null_pcb(current_process))
     {
         new_process.execution_starttime = time_stamp;
@@ -130,7 +130,7 @@ struct PCB handle_process_completion_srtp(struct PCB ready_queue[QUEUEMAX], int 
 
 //  the arrival of a new process in a Round-Robin Scheduler
 struct PCB handle_process_arrival_rr(struct PCB ready_queue[QUEUEMAX], int *queue_cnt, struct PCB current_process, struct PCB new_process, int timestamp, int time_quantum) {
-     int size = queue_cnt;
+    int size = *queue_cnt;
     if (is_null_pcb(current_process))
     {
         new_process.execution_starttime = timestamp;
