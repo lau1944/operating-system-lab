@@ -10,19 +10,19 @@ int is_empty_queue(struct PCB queue[QUEUEMAX]);
 int is_null_pcb(struct PCB process);
 
 // convert pointer to integer
-u_int64_t PointerToInt(void *ptr)
-{
-    u_int64_t *u = (void *)&ptr;
-    return *u;
-}
-
-// int main(int argc, char *argv[]) {
-//     int i = 0;
-//     struct PCB current_process = {1, 1, 4, 1, 5, 4, 8};
-//     struct PCB new_process = {2,2,3,0,0,3,6};
-//     struct PCB ready_queue[QUEUEMAX];
-//     handle_process_arrival_pp(ready_queue, &i, current_process, new_process, 2);
+// u_int64_t PointerToInt(void *ptr)
+// {
+//     u_int64_t *u = (void *)&ptr;
+//     return *u;
 // }
+
+int main(int argc, char *argv[]) {
+    int i = 0;
+    struct PCB current_process = {1, 1, 4, 1, 5, 4, 8};
+    struct PCB new_process = {2,2,3,0,0,3,6};
+    struct PCB ready_queue[QUEUEMAX];
+    handle_process_arrival_pp(ready_queue, &i, current_process, new_process, 2);
+}
 
 // [PID:1, AT:1, TBT:4, EST:1, EET:5, RBT:4, Priority:8]
 // [PID:2, AT:2, TBT:3, EST:0, EET:0, RBT:3, Priority:6]
@@ -47,6 +47,8 @@ struct PCB handle_process_arrival_pp(struct PCB ready_queue[QUEUEMAX], int *queu
         new_process.remaining_bursttime = new_process.total_bursttime;
         ready_queue[size] = new_process;
         ++(*queue_cnt);
+        int size1 = *queue_cnt;
+        printf("%d", size1);
         return current_process;
     }
     else
@@ -68,7 +70,7 @@ struct PCB handle_process_completion_pp(struct PCB ready_queue[QUEUEMAX], int *q
         return NULLPCB;
 
     // find the largest priority PCB
-    int size = PointerToInt(queue_cnt);
+    int size = *queue_cnt;
     struct PCB max_priority_process = ready_queue[0];
     int max_process_index = 0;
     for (int i = 1; i < size; ++i)
@@ -129,7 +131,7 @@ struct PCB handle_process_completion_srtp(struct PCB ready_queue[QUEUEMAX], int 
         return NULLPCB;
 
     // find the shortest remain time process
-    int size = PointerToInt(queue_cnt);
+    int size = *queue_cnt;
     struct PCB short_remain_time_process = ready_queue[0];
     int short_remain_time_process_index = 0;
     for (int i = 1; i < size; ++i)
@@ -175,7 +177,7 @@ struct PCB handle_process_completion_rr(struct PCB ready_queue[QUEUEMAX], int *q
         return NULLPCB;
 
     // find the early arrival time process
-    int size = PointerToInt(queue_cnt);
+    int size = *queue_cnt;
     struct PCB early_arrive_time_process = ready_queue[0];
     int early_arrive_time_process_index = 0;
     for (int i = 1; i < size; ++i)
