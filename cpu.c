@@ -217,12 +217,14 @@ int is_null_pcb(struct PCB process)
 void remove_pcb(struct PCB array[], int index, int array_length)
 {
     if (index == array_length - 1) {
-        (array[index]) = NULLPCB;
+        (array[array_length - 1]) = NULLPCB;
         return;
     }
     for (int i = index; i < array_length; i++)
     {
+        struct PCB buf = array[i];
         array[i] = array[i + 1];
-        array[i + 1] = NULLPCB;
+        array[i + 1] = buf;
     }
+    (array[array_length - 1]) = NULLPCB;
 }
