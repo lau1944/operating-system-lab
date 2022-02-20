@@ -16,21 +16,21 @@ int is_null_pcb(struct PCB process);
 //     return *u;
 // }
 
-int main(int argc, char *argv[]) {
-    int i = 3;
-    struct PCB current_process = {1, 1, 4, 1, 5, 4, 8};
-    struct PCB new_process = {2,2,3,0,0,3,6};
-    struct PCB old_process = {3,2,3,0,0,3,6};
-    struct PCB ready_queue[3];
-    ready_queue[0] = current_process;
-    ready_queue[1] = new_process;
-    ready_queue[2] = old_process;
-    remove_pcb(ready_queue, 1, 3);
-    //handle_process_completion_pp(ready_queue, &i, 5);
-    for (int i = 0; i < 3; i++) {
-        printf("%d", ready_queue[i].process_id);
-    }
-}
+// int main(int argc, char *argv[]) {
+//     int i = 3;
+//     struct PCB current_process = {1, 1, 4, 1, 5, 4, 8};
+//     struct PCB new_process = {2,2,3,0,0,3,6};
+//     struct PCB old_process = {3,2,3,0,0,3,6};
+//     struct PCB ready_queue[3];
+//     ready_queue[0] = current_process;
+//     ready_queue[1] = new_process;
+//     ready_queue[2] = old_process;
+//     remove_pcb(ready_queue, 1, 3);
+//     //handle_process_completion_pp(ready_queue, &i, 5);
+//     for (int i = 0; i < 3; i++) {
+//         printf("%d", ready_queue[i].process_id);
+//     }
+// }
 
 // Priority-based Preemptive Scheduler
 struct PCB handle_process_arrival_pp(struct PCB ready_queue[QUEUEMAX], int *queue_cnt, struct PCB current_process, struct PCB new_process, int timestamp)
