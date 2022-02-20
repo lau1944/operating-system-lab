@@ -5,6 +5,8 @@ struct PCB NULLPCB = {0, 0, 0, 0, 0, 0, 0};
 
 void remove_pcb(struct PCB array[QUEUEMAX], int index, int array_length);
 
+int is_empty_queue(struct PCB queue[QUEUEMAX]);
+
 int is_null_pcb(struct PCB process);
 
 // convert pointer to integer
@@ -69,7 +71,7 @@ struct PCB handle_process_arrival_pp(struct PCB ready_queue[QUEUEMAX], int *queu
 //  the completion of execution of a process in a Priority-based Preemptive Scheduler
 struct PCB handle_process_completion_pp(struct PCB ready_queue[QUEUEMAX], int *queue_cnt, int timestamp)
 {
-    if (is_null_pcb(ready_queue[0]))
+    if (is_empty_queue(ready_queue))
         return NULLPCB;
 
     // find the largest priority PCB
@@ -127,7 +129,7 @@ struct PCB handle_process_arrival_srtp(struct PCB ready_queue[QUEUEMAX], int *qu
 //  the completion of execution of a process in a Shortest-Remaining-Time Preemptive Scheduler
 struct PCB handle_process_completion_srtp(struct PCB ready_queue[QUEUEMAX], int *queue_cnt, int timestamp)
 {
-    if (is_null_pcb(ready_queue[0]))
+    if (is_empty_queue(ready_queue))
         return NULLPCB;
 
     // find the shortest remain time process
@@ -171,7 +173,7 @@ struct PCB handle_process_arrival_rr(struct PCB ready_queue[QUEUEMAX], int *queu
 // the completion of execution of a process in a Round-Robin Scheduler
 struct PCB handle_process_completion_rr(struct PCB ready_queue[QUEUEMAX], int *queue_cnt, int timestamp, int time_quantum)
 {
-    if (is_null_pcb(ready_queue[0]))
+    if (is_empty_queue(ready_queue))
         return NULLPCB;
 
     // find the early arrival time process
@@ -191,6 +193,18 @@ struct PCB handle_process_completion_rr(struct PCB ready_queue[QUEUEMAX], int *q
     early_arrive_time_process.execution_starttime = timestamp;
     early_arrive_time_process.execution_endtime = timestamp + early_arrive_time_process.remaining_bursttime;
     return early_arrive_time_process;
+}
+
+int is_empty_queue(struct PCB queue[QUEUEMAX])
+{
+    for (int i = 0; i < QUEUEMAX; ++i)
+    {
+        if (!is_null_pcb(queue[i]))
+        {
+            return 0;
+        }
+    }
+    return 1;
 }
 
 int is_null_pcb(struct PCB process)
