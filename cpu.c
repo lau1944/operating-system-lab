@@ -20,17 +20,12 @@ int is_null_pcb(struct PCB process);
 //     int i = 2;
 //     struct PCB current_process = {1, 1, 4, 1, 5, 4, 8};
 //     struct PCB new_process = {2,2,3,0,0,3,6};
-//     struct PCB ready_queue[QUEUEMAX];
+//     struct PCB old_process = {3,2,3,0,0,3,6};
+//     struct PCB ready_queue[3];
 //     ready_queue[0] = current_process;
 //     ready_queue[1] = new_process;
-//     handle_process_completion_pp(ready_queue, &i, 4);
-//     int count = 0;
-//     for (int i = 0; i < 2; i++) {
-//         if (&ready_queue[i] != NULL) {
-//             count++;
-//         }
-//     }
-//     printf("%d", count);
+//     ready_queue[2] = old_process;
+//     remove_pcb(&ready_queue, 3, --i);
 // }
 
 // Priority-based Preemptive Scheduler
@@ -218,12 +213,13 @@ int is_null_pcb(struct PCB process)
 // remove pcb from ready queue
 void remove_pcb(struct PCB *array[], int index, int array_length)
 {
-    array[index] = NULL;
+    if (index == array_length - 1) {
+        array[index] = NULL;
+        return;
+    }
     for (int i = index; i < array_length; i++)
     {
-        // swap
-        struct PCB buf = (*array[i]);
         array[i] = array[i + 1];
-        (*array[i+1]) = buf;
+        array[i + 1] = NULL;
     }
 }
