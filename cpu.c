@@ -80,7 +80,7 @@ struct PCB handle_process_completion_pp(struct PCB ready_queue[QUEUEMAX], int *q
         }
     }
     // remove from ready queue
-    remove_pcb(&ready_queue, max_process_index, QUEUEMAX);
+    remove_pcb(&ready_queue, max_process_index, *queue_cnt);
     --(*queue_cnt);
     max_priority_process.execution_starttime = timestamp;
     max_priority_process.execution_endtime = timestamp + max_priority_process.remaining_bursttime;
@@ -141,7 +141,7 @@ struct PCB handle_process_completion_srtp(struct PCB ready_queue[QUEUEMAX], int 
         }
     }
     // remove from ready queue
-    remove_pcb(&ready_queue, short_remain_time_process_index, QUEUEMAX);
+    remove_pcb(&ready_queue, short_remain_time_process_index, *queue_cnt);
     --(*queue_cnt);
     short_remain_time_process.execution_starttime = timestamp;
     short_remain_time_process.execution_endtime = timestamp + short_remain_time_process.remaining_bursttime;
@@ -187,7 +187,7 @@ struct PCB handle_process_completion_rr(struct PCB ready_queue[QUEUEMAX], int *q
         }
     }
     // remove from ready queue
-    remove_pcb(&ready_queue, early_arrive_time_process_index, QUEUEMAX);
+    remove_pcb(&ready_queue, early_arrive_time_process_index, *queue_cnt);
     --(*queue_cnt);
     early_arrive_time_process.execution_starttime = timestamp;
     early_arrive_time_process.execution_endtime = timestamp + early_arrive_time_process.remaining_bursttime;
