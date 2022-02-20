@@ -3,7 +3,7 @@
 #include <stdio.h>
 struct PCB NULLPCB = {0, 0, 0, 0, 0, 0, 0};
 
-void remove_pcb(struct PCB array[], int index, int array_length);
+void remove_pcb(struct PCB array[QUEUEMAX], int index, int array_length);
 
 int is_null_pcb(struct PCB process);
 
@@ -58,11 +58,11 @@ struct PCB handle_process_arrival_pp(struct PCB ready_queue[QUEUEMAX], int *queu
 //  the completion of execution of a process in a Priority-based Preemptive Scheduler
 struct PCB handle_process_completion_pp(struct PCB ready_queue[QUEUEMAX], int *queue_cnt, int timestamp)
 {
-    int size = PointerToInt(queue_cnt);
     if (&ready_queue[0] == NULL)
         return NULLPCB;
 
     // find the largest priority PCB
+    int size = PointerToInt(queue_cnt);
     struct PCB max_priority_process = ready_queue[0];
     int max_process_index = 0;
     for (int i = 1; i < size; ++i)
@@ -74,7 +74,7 @@ struct PCB handle_process_completion_pp(struct PCB ready_queue[QUEUEMAX], int *q
         }
     }
     // remove from ready queue
-    remove_pcb(ready_queue, max_process_index, QUEUEMAX);
+    remove_pcb(ready_queue, max_process_index, size);
     max_priority_process.execution_starttime = timestamp;
     max_priority_process.execution_endtime = timestamp + max_priority_process.remaining_bursttime;
     return max_priority_process;
@@ -130,7 +130,7 @@ struct PCB handle_process_completion_srtp(struct PCB ready_queue[QUEUEMAX], int 
         }
     }
     // remove from ready queue
-    remove_pcb(ready_queue, short_remain_time_process_index, QUEUEMAX);
+    remove_pcb(ready_queue, short_remain_time_process_index, size);
     short_remain_time_process.execution_starttime = timestamp;
     short_remain_time_process.execution_endtime = timestamp + short_remain_time_process.remaining_bursttime;
     return short_remain_time_process;
@@ -171,7 +171,7 @@ struct PCB handle_process_completion_rr(struct PCB ready_queue[QUEUEMAX], int *q
         }
     }
     // remove from ready queue
-    remove_pcb(ready_queue, early_arrive_time_process_index, QUEUEMAX);
+    remove_pcb(ready_queue, early_arrive_time_process_index, size);
     early_arrive_time_process.execution_starttime = timestamp;
     early_arrive_time_process.execution_endtime = timestamp + early_arrive_time_process.remaining_bursttime;
     return early_arrive_time_process;
@@ -188,8 +188,7 @@ int is_null_pcb(struct PCB process) {
 }
 
 // remove pcb from ready queue
-void remove_pcb(struct PCB array[], int index, int array_length)
+void remove_pcb(struct PCB array[QUEUEMAX], int index, int array_length)
 {
-   int i;
-   for(i = index; i < array_length - 1; i++) array[i] = array[i + 1];
+   for(int i = index; i < array_length; i++) array[i] = array[i + 1];
 }
