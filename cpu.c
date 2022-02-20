@@ -8,8 +8,9 @@ void remove_pcb(struct PCB array[QUEUEMAX], int index, int array_length);
 int is_null_pcb(struct PCB process);
 
 // convert pointer to integer
-u_int64_t PointerToInt(void* ptr){
-    u_int64_t* u=(void*)&ptr;
+u_int64_t PointerToInt(void *ptr)
+{
+    u_int64_t *u = (void *)&ptr;
     return *u;
 }
 
@@ -25,7 +26,7 @@ u_int64_t PointerToInt(void* ptr){
 //     int count = 0;
 //     for (int i = 0; i < QUEUEMAX; i++) {
 //         printf("process id: %d \n", ready_queue[i].process_id);
-        
+
 //     }
 //     printf("%d", count);
 // }
@@ -68,7 +69,7 @@ struct PCB handle_process_arrival_pp(struct PCB ready_queue[QUEUEMAX], int *queu
 //  the completion of execution of a process in a Priority-based Preemptive Scheduler
 struct PCB handle_process_completion_pp(struct PCB ready_queue[QUEUEMAX], int *queue_cnt, int timestamp)
 {
-    if (&ready_queue[0] == NULL)
+    if (&ready_queue[0] == NULL || is_null_pcb(ready_queue[0]))
         return NULLPCB;
 
     // find the largest priority PCB
@@ -124,8 +125,10 @@ struct PCB handle_process_arrival_srtp(struct PCB ready_queue[QUEUEMAX], int *qu
 }
 
 //  the completion of execution of a process in a Shortest-Remaining-Time Preemptive Scheduler
-struct PCB handle_process_completion_srtp(struct PCB ready_queue[QUEUEMAX], int *queue_cnt, int timestamp) {
-    if (&ready_queue[0] == NULL) return NULLPCB;
+struct PCB handle_process_completion_srtp(struct PCB ready_queue[QUEUEMAX], int *queue_cnt, int timestamp)
+{
+    if (&ready_queue[0] == NULL || is_null_pcb(ready_queue[0]))
+        return NULLPCB;
 
     // find the shortest remain time process
     int size = PointerToInt(queue_cnt);
@@ -147,7 +150,8 @@ struct PCB handle_process_completion_srtp(struct PCB ready_queue[QUEUEMAX], int 
 }
 
 //  the arrival of a new process in a Round-Robin Scheduler
-struct PCB handle_process_arrival_rr(struct PCB ready_queue[QUEUEMAX], int *queue_cnt, struct PCB current_process, struct PCB new_process, int timestamp, int time_quantum) {
+struct PCB handle_process_arrival_rr(struct PCB ready_queue[QUEUEMAX], int *queue_cnt, struct PCB current_process, struct PCB new_process, int timestamp, int time_quantum)
+{
     int size = PointerToInt(queue_cnt);
     if (is_null_pcb(current_process))
     {
@@ -165,8 +169,10 @@ struct PCB handle_process_arrival_rr(struct PCB ready_queue[QUEUEMAX], int *queu
 }
 
 // the completion of execution of a process in a Round-Robin Scheduler
-struct PCB handle_process_completion_rr(struct PCB ready_queue[QUEUEMAX], int *queue_cnt, int timestamp, int time_quantum) {
-    if (&ready_queue[0] == NULL) return NULLPCB;
+struct PCB handle_process_completion_rr(struct PCB ready_queue[QUEUEMAX], int *queue_cnt, int timestamp, int time_quantum)
+{
+    if (&ready_queue[0] == NULL || is_null_pcb(ready_queue[0]))
+        return NULLPCB;
 
     // find the early arrival time process
     int size = PointerToInt(queue_cnt);
@@ -187,20 +193,16 @@ struct PCB handle_process_completion_rr(struct PCB ready_queue[QUEUEMAX], int *q
     return early_arrive_time_process;
 }
 
-int is_null_pcb(struct PCB process) {
-    return process.arrival_timestamp    == NULLPCB.arrival_timestamp 
-        && process.execution_endtime    == NULLPCB.execution_endtime
-        && process.execution_starttime  == NULLPCB.execution_starttime
-        && process.process_id           == NULLPCB.process_id
-        && process.process_priority     == NULLPCB.process_priority
-        && process.remaining_bursttime  == NULLPCB.remaining_bursttime
-        && process.total_bursttime      == NULLPCB.total_bursttime;
+int is_null_pcb(struct PCB process)
+{
+    return process.arrival_timestamp == NULLPCB.arrival_timestamp && process.execution_endtime == NULLPCB.execution_endtime && process.execution_starttime == NULLPCB.execution_starttime && process.process_id == NULLPCB.process_id && process.process_priority == NULLPCB.process_priority && process.remaining_bursttime == NULLPCB.remaining_bursttime && process.total_bursttime == NULLPCB.total_bursttime;
 }
 
 // remove pcb from ready queue
 void remove_pcb(struct PCB array[QUEUEMAX], int index, int array_length)
 {
-   for (int i = index; i < QUEUEMAX; ++i) {
-       array[i] = array[i + 1];
-   }
+    for (int i = index; i < QUEUEMAX; ++i)
+    {
+        array[i] = array[i + 1];
+    }
 }
