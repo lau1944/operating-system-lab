@@ -40,7 +40,7 @@ struct PCB handle_process_arrival_pp(struct PCB ready_queue[QUEUEMAX], int *queu
     }
     
     // current process is running
-    if (current_process.process_priority > new_process.process_priority)
+    if (current_process.process_priority <= new_process.process_priority)
     {
         new_process.execution_endtime = 0;
         new_process.execution_starttime = 0;
@@ -51,12 +51,12 @@ struct PCB handle_process_arrival_pp(struct PCB ready_queue[QUEUEMAX], int *queu
     }
     else
     {
-        current_process.execution_endtime = 0;
-        current_process.remaining_bursttime = timestamp - current_process.execution_starttime;
-        ready_queue[size] = current_process;
-        ++(*queue_cnt);
         new_process.execution_starttime = timestamp;
         new_process.execution_endtime = timestamp + new_process.total_bursttime;
+        current_process.execution_endtime = 0;
+        current_process.remaining_bursttime = current_process.total_bursttime - timestamp + current_process.execution_starttime;
+        ready_queue[size] = current_process;
+        ++(*queue_cnt);
         return new_process;
     }
 }
@@ -115,7 +115,7 @@ struct PCB handle_process_arrival_srtp(struct PCB ready_queue[QUEUEMAX], int *qu
         new_process.remaining_bursttime = new_process.total_bursttime;
         current_process.execution_starttime = 0;
         current_process.execution_endtime = 0;
-        current_process.remaining_bursttime = current_process.total_bursttime - time_stamp;
+        current_process.remaining_bursttime = current_process.total_bursttime - time_stamp + current_process.execution_starttime;
         ready_queue[size] = current_process;
         ++(*queue_cnt);
         return new_process;
