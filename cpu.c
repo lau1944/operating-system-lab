@@ -102,13 +102,13 @@ struct PCB handle_process_arrival_srtp(struct PCB ready_queue[QUEUEMAX], int *qu
         return new_process;
     }
 
-    if (new_process.total_bursttime >= current_process.remaining_bursttime)
+    if (new_process.total_bursttime < current_process.remaining_bursttime)
     {
         new_process.execution_starttime = 0;
         new_process.execution_endtime = 0;
         new_process.remaining_bursttime = new_process.total_bursttime;
         ready_queue[size] = new_process;
-        return new_process;
+        return current_process;
     }
     else
     {
