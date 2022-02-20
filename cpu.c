@@ -198,7 +198,7 @@ int is_empty_queue(struct PCB queue[QUEUEMAX])
 {
     for (int i = 0; i < QUEUEMAX; ++i)
     {
-        if (&queue[i] == NULL || is_null_pcb(queue[i]))
+        if (&queue[i] == NULL)
         {
             return 0;
         }
