@@ -3,9 +3,9 @@
 #include <stdio.h>
 struct PCB NULLPCB = {0, 0, 0, 0, 0, 0, 0};
 
-void remove_pcb(struct PCB array[], int index, int array_length);
+void remove_pcb(struct PCB array[QUEUEMAX], int index, int array_length);
 
-int is_empty_queue(struct PCB queue[], int length);
+int is_empty_queue(struct PCB queue[QUEUEMAX], int length);
 
 int is_null_pcb(struct PCB process);
 
@@ -16,20 +16,21 @@ int is_null_pcb(struct PCB process);
 //     return *u;
 // }
 
-// int main(int argc, char *argv[]) {
+// int main(int argc, char *argv[])
+// {
 //     int i = 3;
 //     struct PCB current_process = {1, 1, 4, 1, 5, 4, 8};
-//     struct PCB new_process = {2,2,3,0,0,3,6};
-//     struct PCB old_process = {3,2,3,0,0,3,6};
+//     struct PCB new_process = {2, 2, 3, 0, 0, 3, 6};
+//     struct PCB old_process = {3, 2, 3, 0, 0, 3, 6};
 //     struct PCB ready_queue[3];
 //     ready_queue[0] = current_process;
 //     ready_queue[1] = new_process;
 //     ready_queue[2] = old_process;
-//     remove_pcb(ready_queue, 1, 3);
-//     //handle_process_completion_pp(ready_queue, &i, 5);
-//     for (int i = 0; i < 3; i++) {
-//         printf("%d", ready_queue[i].process_id);
-//     }
+//     // remove_pcb(ready_queue, 1, 3);
+//     handle_process_completion_pp(ready_queue, &i, 5);
+//     // for (int i = 0; i < 3; i++) {
+//     //     printf("%d", ready_queue[i].process_id);
+//     // }
 // }
 
 // Priority-based Preemptive Scheduler
@@ -72,7 +73,6 @@ struct PCB handle_process_completion_pp(struct PCB ready_queue[QUEUEMAX], int *q
 {
     if (is_empty_queue(ready_queue, *queue_cnt))
         return NULLPCB;
-
     // find the largest priority PCB
     int size = *queue_cnt;
     struct PCB high_priority_process = ready_queue[0];
@@ -200,11 +200,11 @@ struct PCB handle_process_completion_rr(struct PCB ready_queue[QUEUEMAX], int *q
     return early_arrive_time_process;
 }
 
-int is_empty_queue(struct PCB queue[], int length)
+int is_empty_queue(struct PCB queue[QUEUEMAX], int length)
 {
     for (int i = 0; i < length; ++i)
     {
-        if ((&queue)[i] == NULL || is_null_pcb(queue[i]))
+        if ((&queue)[i] != NULL && !is_null_pcb(queue[i]))
         {
             return 0;
         }
@@ -218,11 +218,11 @@ int is_null_pcb(struct PCB process)
 }
 
 // remove pcb from ready queue
-void remove_pcb(struct PCB array[], int index, int array_length)
+void remove_pcb(struct PCB array[QUEUEMAX], int index, int array_length)
 {
     for (int i = index; i < array_length - 1; i++)
     {
-        array[i] = array[i+1];
+        array[i] = array[i + 1];
     }
     array[array_length - 1] = NULLPCB;
 }
