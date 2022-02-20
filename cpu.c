@@ -4,10 +4,6 @@ struct PCB NULLPCB = {0, 0, 0, 0, 0, 0, 0};
 
 void remove_pcb(struct PCB array[], int index, int array_length);
 
-int main(int argc, char *argv[]) {
-    return 0;
-}
-
 // Priority-based Preemptive Scheduler
 struct PCB handle_process_arrival_pp(struct PCB ready_queue[QUEUEMAX], int *queue_cnt, struct PCB current_process, struct PCB new_process, int timestamp)
 {
