@@ -3,7 +3,7 @@
 #include <stdio.h>
 struct PCB NULLPCB = {0, 0, 0, 0, 0, 0, 0};
 
-void remove_pcb(struct PCB *array[QUEUEMAX], int index, int array_length);
+void remove_pcb(struct PCB array[QUEUEMAX], int index, int array_length);
 
 int is_null_pcb(struct PCB process);
 
@@ -13,23 +13,22 @@ u_int64_t PointerToInt(void* ptr){
     return *u;
 }
 
-int main(int argc, char *argv[]) {
-    struct PCB current_process = {1, 1, 4, 1, 5, 4, 8};
-    struct PCB new_process = {2,2,3,0,0,3,6};
-    struct PCB *ready_queue[QUEUEMAX];
-    //handle_process_arrival_pp(ready_queue, 0, current_process, new_process, 2);
+// int main(int argc, char *argv[]) {
+//     struct PCB current_process = {1, 1, 4, 1, 5, 4, 8};
+//     struct PCB new_process = {2,2,3,0,0,3,6};
+//     struct PCB ready_queue[QUEUEMAX];
+//     //handle_process_arrival_pp(ready_queue, 0, current_process, new_process, 2);
 
-    //ready_queue[0] = current_process;
-    //ready_queue[1] = new_process;
-    remove_pcb(ready_queue, 0, 2);
-    int count = 0;
-    for (int i = 0; i < QUEUEMAX; i++) {
-        if (ready_queue[i] == NULL) {
-            ++count;
-        }
-    }
-    printf("%d", count);
-}
+//     ready_queue[0] = current_process;
+//     ready_queue[1] = new_process;
+//     remove_pcb(ready_queue, 0, 2);
+//     int count = 0;
+//     for (int i = 0; i < QUEUEMAX; i++) {
+//         printf("process id: %d \n", ready_queue[i].process_id);
+        
+//     }
+//     printf("%d", count);
+// }
 
 // [PID:1, AT:1, TBT:4, EST:1, EET:5, RBT:4, Priority:8]
 // [PID:2, AT:2, TBT:3, EST:0, EET:0, RBT:3, Priority:6]
@@ -199,7 +198,9 @@ int is_null_pcb(struct PCB process) {
 }
 
 // remove pcb from ready queue
-void remove_pcb(struct PCB *array[QUEUEMAX], int index, int array_length)
+void remove_pcb(struct PCB array[QUEUEMAX], int index, int array_length)
 {
-   array[index] = NULL;
+   for (int i = index; i < QUEUEMAX; ++i) {
+       array[i] = array[i + 1];
+   }
 }
