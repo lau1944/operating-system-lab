@@ -7,6 +7,7 @@ void remove_pcb(struct PCB array[], int index, int array_length);
 
 int is_null_pcb(struct PCB process);
 
+// convert pointer to integer
 u_int64_t PointerToInt(void* ptr){
     u_int64_t* u=(void*)&ptr;
     return *u;
@@ -57,13 +58,14 @@ struct PCB handle_process_arrival_pp(struct PCB ready_queue[QUEUEMAX], int *queu
 //  the completion of execution of a process in a Priority-based Preemptive Scheduler
 struct PCB handle_process_completion_pp(struct PCB ready_queue[QUEUEMAX], int *queue_cnt, int timestamp)
 {
+    int size = PointerToInt(queue_cnt);
     if (&ready_queue[0] == NULL)
         return NULLPCB;
 
     // find the largest priority PCB
     struct PCB max_priority_process = ready_queue[0];
     int max_process_index = 0;
-    for (int i = 1; i < *queue_cnt; ++i)
+    for (int i = 1; i < size; ++i)
     {
         if (ready_queue[i].process_priority > max_priority_process.process_priority)
         {
@@ -116,9 +118,10 @@ struct PCB handle_process_completion_srtp(struct PCB ready_queue[QUEUEMAX], int 
     if (&ready_queue[0] == NULL) return NULLPCB;
 
     // find the shortest remain time process
+    int size = PointerToInt(queue_cnt);
     struct PCB short_remain_time_process = ready_queue[0];
     int short_remain_time_process_index = 0;
-    for (int i = 1; i < *queue_cnt; ++i)
+    for (int i = 1; i < size; ++i)
     {
         if (ready_queue[i].remaining_bursttime < short_remain_time_process.remaining_bursttime)
         {
@@ -156,9 +159,10 @@ struct PCB handle_process_completion_rr(struct PCB ready_queue[QUEUEMAX], int *q
     if (&ready_queue[0] == NULL) return NULLPCB;
 
     // find the early arrival time process
+    int size = PointerToInt(queue_cnt);
     struct PCB early_arrive_time_process = ready_queue[0];
     int early_arrive_time_process_index = 0;
-    for (int i = 1; i < *queue_cnt; ++i)
+    for (int i = 1; i < size; ++i)
     {
         if (ready_queue[i].arrival_timestamp < early_arrive_time_process.arrival_timestamp)
         {
