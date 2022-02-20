@@ -7,7 +7,7 @@ void remove_pcb(struct PCB array[], int index, int array_length);
 
 int is_null_pcb(struct PCB process);
 
-uint64_t PointerToInt(void* ptr){
+u_int64_t PointerToInt(void* ptr){
     u_int64_t* u=(void*)&ptr;
     return *u;
 }
