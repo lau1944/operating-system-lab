@@ -7,6 +7,11 @@ void remove_pcb(struct PCB array[], int index, int array_length);
 
 int is_null_pcb(struct PCB process);
 
+uint64_t PointerToInt(void* ptr){
+    uint64_t* u=(void*)&ptr;
+    return *u;
+}
+
 int main(int argc, char *argv[]) {
     struct PCB current_process = {1, 1, 4, 1, 5, 4, 8};
     struct PCB new_process = {2,2,3,0,0,3,6};
@@ -19,7 +24,7 @@ int main(int argc, char *argv[]) {
 // Priority-based Preemptive Scheduler
 struct PCB handle_process_arrival_pp(struct PCB ready_queue[QUEUEMAX], int *queue_cnt, struct PCB current_process, struct PCB new_process, int timestamp)
 {
-    int size = (int) queue_cnt;
+    int size = PointerToInt(queue_cnt);
     // No current process
     if (is_null_pcb(current_process))
     {
@@ -76,7 +81,7 @@ struct PCB handle_process_completion_pp(struct PCB ready_queue[QUEUEMAX], int *q
 //  the arrival of a new process in a Shortest-Remaining-Time-Next Preemptive Scheduler
 struct PCB handle_process_arrival_srtp(struct PCB ready_queue[QUEUEMAX], int *queue_cnt, struct PCB current_process, struct PCB new_process, int time_stamp)
 {
-    int size = (int) queue_cnt;
+    int size = PointerToInt(queue_cnt);
     if (is_null_pcb(current_process))
     {
         new_process.execution_starttime = time_stamp;
@@ -130,7 +135,7 @@ struct PCB handle_process_completion_srtp(struct PCB ready_queue[QUEUEMAX], int 
 
 //  the arrival of a new process in a Round-Robin Scheduler
 struct PCB handle_process_arrival_rr(struct PCB ready_queue[QUEUEMAX], int *queue_cnt, struct PCB current_process, struct PCB new_process, int timestamp, int time_quantum) {
-    int size = (int) queue_cnt;
+    int size = PointerToInt(queue_cnt);
     if (is_null_pcb(current_process))
     {
         new_process.execution_starttime = timestamp;
