@@ -81,6 +81,7 @@ struct MEMORY_BLOCK first_fit_allocate(int request_size, struct MEMORY_BLOCK mem
         int current_gap = memory_map[i].segment_size - request_size;
         if (current_gap >= 0) {
             space_index = i;
+            break;
         }
     }
 
