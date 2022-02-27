@@ -9,6 +9,8 @@ A operating system school project repo
 
 * [ Project 3 : CPU schedule ](https://github.com/lau1944/os_uni_project/tree/process_thread)
 
+* [ Project 4 : Memory Lab ](https://github.com/lau1944/os_uni_project/tree/memory)
+
 
 # How to run
 
