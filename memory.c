@@ -8,20 +8,20 @@ struct MEMORY_BLOCK insert_memory(struct MEMORY_BLOCK memory_map[MAPMAX], int ta
 
 void remove_memory_from_map(struct MEMORY_BLOCK memory_map[MAPMAX], int target_index, int *memory_map_size, int target_size);
 
-int main()
-{
-    int size = 3;
-    struct MEMORY_BLOCK first = {0, 15, 15, 1};
-    struct MEMORY_BLOCK second = {16, 22, 7, 0};
-    struct MEMORY_BLOCK third = {23, 27, 5, 3};
-    struct MEMORY_BLOCK memory_map[MAPMAX] = {first, second, third};
-    struct MEMORY_BLOCK inserted = {28, 32, 5, 4};
-    insert_memory(memory_map, 1, &size, 5, 4);
-    for (int i = 0; i < 5; i++)
-    {
-        printf("%d \n", memory_map[i].process_id);
-    }
-}
+// int main()
+// {
+//     int size = 3;
+//     struct MEMORY_BLOCK first = {0, 15, 15, 1};
+//     struct MEMORY_BLOCK second = {16, 22, 7, 0};
+//     struct MEMORY_BLOCK third = {23, 27, 5, 3};
+//     struct MEMORY_BLOCK memory_map[MAPMAX] = {first, second, third};
+//     struct MEMORY_BLOCK inserted = {28, 32, 5, 4};
+//     insert_memory(memory_map, 1, &size, 5, 4);
+//     for (int i = 0; i < 5; i++)
+//     {
+//         printf("%d \n", memory_map[i].process_id);
+//     }
+// }
 
 struct MEMORY_BLOCK best_fit_allocate(int request_size, struct MEMORY_BLOCK memory_map[MAPMAX], int *map_cnt, int process_id)
 {
