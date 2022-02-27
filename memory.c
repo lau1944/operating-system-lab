@@ -8,13 +8,28 @@ struct MEMORY_BLOCK insert_memory(struct MEMORY_BLOCK memory_map[MAPMAX], int ta
 
 void remove_memory_from_map(struct MEMORY_BLOCK memory_map[MAPMAX], int target_index, int *memory_map_size, int target_size);
 
+int main()
+{
+    int size = 3;
+    struct MEMORY_BLOCK first = {0, 15, 15, 1};
+    struct MEMORY_BLOCK second = {16, 22, 7, 0};
+    struct MEMORY_BLOCK third = {23, 27, 5, 3};
+    struct MEMORY_BLOCK memory_map[MAPMAX] = {first, second, third};
+    struct MEMORY_BLOCK inserted = {28, 32, 5, 4};
+    insert_memory(memory_map, 1, &size, 5, 4);
+    for (int i = 0; i < 5; i++)
+    {
+        printf("%d \n", memory_map[i].process_id);
+    }
+}
+
 struct MEMORY_BLOCK best_fit_allocate(int request_size, struct MEMORY_BLOCK memory_map[MAPMAX], int *map_cnt, int process_id)
 {
     int memory_size = *map_cnt;
     if (memory_size == 0)
-        return NULLBLOCK;
+        return NULLBLOCK; 
 
-    int *min_gap_size;
+    int *min_gap_size = NULL;
     int min_gap_index;
     // Find the smallest gap
     for (int i = 0; i < memory_size; ++i)
@@ -58,50 +73,33 @@ struct MEMORY_BLOCK first_fit_allocate(int request_size, struct MEMORY_BLOCK mem
     if (memory_size == 0)
         return NULLBLOCK;
 
-    int available_memory_index_array[MAPMAX];
-    int available_index = 0;
-    // Find all the available memory block
-    for (int i = 0; i < *map_cnt; ++i)
-    {
+    int space_index = -1;
+    for (int i = 0; i < memory_size; ++i) {
         // It has been occupied
         if (memory_map[i].process_id == 0)
             continue;
         int current_gap = memory_map[i].segment_size - request_size;
-        if (current_gap >= 0)
-        {
-            available_memory_index_array[available_index++] = i;
+        if (current_gap >= 0) {
+            space_index = i;
         }
     }
 
-    if (available_index == 0)
-    {
-        return NULLBLOCK;
+    if (space_index == -1) return NULLBLOCK;        
+
+    if (memory_map[space_index].segment_size == request_size) {
+        memory_map[space_index].process_id = process_id;
+        return memory_map[space_index];
     }
 
-    // Find the first memory block (lowest start address)
-    int first_available_index = available_memory_index_array[0];
-    int min_start_address = memory_map[first_available_index].start_address;
-    int min_start_index = first_available_index;
-    for (int i = 0; i <= available_index; ++i)
-    {
-        if (memory_map[available_memory_index_array[i]].start_address < min_start_address)
-        {
-            min_start_address = memory_map[available_memory_index_array[i]].start_address;
-            min_start_index = available_memory_index_array[i];
-        }
-    }
-
-    if (memory_map[min_start_index].segment_size == request_size)
-    {
-        memory_map[min_start_index].process_id = process_id;
-        return memory_map[min_start_index];
-    }
-
-    return insert_memory(memory_map, min_start_index, map_cnt, request_size, process_id);
+    return insert_memory(memory_map, space_index, map_cnt, request_size, process_id);
 }
 
 struct MEMORY_BLOCK worst_fit_allocate(int request_size, struct MEMORY_BLOCK memory_map[MAPMAX], int *map_cnt, int process_id)
 {
+    int memory_size = *map_cnt;
+    if (memory_size == 0)
+        return NULLBLOCK;
+
     int memory_size = *map_cnt;
     if (memory_size == 0)
         return NULLBLOCK;
@@ -141,7 +139,7 @@ struct MEMORY_BLOCK worst_fit_allocate(int request_size, struct MEMORY_BLOCK mem
         return memory_map[max_gap_index];
     }
 
-    return insert_memory(memory_map, max_gap_index, map_cnt, request_size, process_id);
+    return insert_memory(memory_map, max_gap_index, map_cnt, request_size, process_id);    
 }
 
 struct MEMORY_BLOCK next_fit_allocate(int request_size, struct MEMORY_BLOCK memory_map[MAPMAX], int *map_cnt, int process_id, int last_address)
@@ -150,46 +148,25 @@ struct MEMORY_BLOCK next_fit_allocate(int request_size, struct MEMORY_BLOCK memo
     if (memory_size == 0)
         return NULLBLOCK;
 
-    int available_memory_index_array[MAPMAX];
-    int available_index = 0;
-    // Find all the available memory block
-    for (int i = 0; i < *map_cnt; ++i)
-    {
+    int space_index = -1;
+    for (int i = 0; i < memory_size; ++i) {
         // It has been occupied
         if (memory_map[i].process_id == 0)
             continue;
         int current_gap = memory_map[i].segment_size - request_size;
-        if (current_gap >= 0)
-        {
-            available_memory_index_array[available_index++] = i;
+        if (current_gap >= 0 && memory_map[i].start_address >= last_address) {
+            space_index = i;
         }
+    }       
+
+    if (space_index == -1) return NULLBLOCK; 
+
+    if (memory_map[space_index].segment_size == request_size) {
+        memory_map[space_index].process_id = process_id;
+        return memory_map[space_index];
     }
 
-    if (available_index == 0)
-    {
-        return NULLBLOCK;
-    }
-
-    // Find the first memory block (lowest start address)
-    int first_available_index = available_memory_index_array[0];
-    int min_start_address = memory_map[first_available_index].start_address;
-    int min_start_index = first_available_index;
-    for (int i = 0; i <= available_index; ++i)
-    {
-        if (memory_map[available_memory_index_array[i]].start_address < min_start_address && memory_map[available_memory_index_array[i]].start_address >= last_address)
-        {
-            min_start_address = memory_map[available_memory_index_array[i]].start_address;
-            min_start_index = available_memory_index_array[i];
-        }
-    }
-
-    if (memory_map[min_start_index].segment_size == request_size)
-    {
-        memory_map[min_start_index].process_id = process_id;
-        return memory_map[min_start_index];
-    }
-
-    return insert_memory(memory_map, min_start_index, map_cnt, request_size, process_id);
+    return insert_memory(memory_map, space_index, map_cnt, request_size, process_id);
 }
 
 void release_memory(struct MEMORY_BLOCK freed_block, struct MEMORY_BLOCK memory_map[MAPMAX], int *map_cnt)
@@ -217,7 +194,7 @@ void release_memory(struct MEMORY_BLOCK freed_block, struct MEMORY_BLOCK memory_
 
     if (memory_map[freed_index + 1].process_id == 0)
     {
-        memory_map[freed_index + 1].end_address = freed_block.end_address;
+        memory_map[freed_index + 1].start_address = freed_block.start_address;
         remove_memory_from_map(memory_map, freed_index, map_cnt, 1);
         return;
     }
