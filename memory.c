@@ -100,10 +100,6 @@ struct MEMORY_BLOCK worst_fit_allocate(int request_size, struct MEMORY_BLOCK mem
     if (memory_size == 0)
         return NULLBLOCK;
 
-    int memory_size = *map_cnt;
-    if (memory_size == 0)
-        return NULLBLOCK;
-
     int *max_gap_size;
     int max_gap_index;
     // Find the smallest gap
