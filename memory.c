@@ -44,6 +44,12 @@ struct MEMORY_BLOCK best_fit_allocate(int request_size, struct MEMORY_BLOCK memo
             continue;
 
         hasSpace = 1;
+
+        if (current_gap == 0) {
+            memory_map[current_gap].process_id = process_id;
+            return memory_map[current_gap];
+        }
+
         if (i == 0)
         {
             min_gap_index = 0;
@@ -59,12 +65,6 @@ struct MEMORY_BLOCK best_fit_allocate(int request_size, struct MEMORY_BLOCK memo
     // Cannot find space
     if (!hasSpace)
         return NULLBLOCK;
-
-    if (min_gap_size == 0)
-    {
-        memory_map[min_gap_index].process_id = process_id;
-        return memory_map[min_gap_index];
-    }
 
     return insert_memory(memory_map, min_gap_index, map_cnt, request_size, process_id);
 }
@@ -122,6 +122,12 @@ struct MEMORY_BLOCK worst_fit_allocate(int request_size, struct MEMORY_BLOCK mem
             continue;
 
         hasSpace = 1;
+
+        if (current_gap == 0) {
+            memory_map[current_gap].process_id = process_id;
+            return memory_map[current_gap];
+        }
+        
         if (i == 0)
         {
             max_gap_index = 0;
@@ -137,12 +143,6 @@ struct MEMORY_BLOCK worst_fit_allocate(int request_size, struct MEMORY_BLOCK mem
     // Cannot find space
     if (!hasSpace)
         return NULLBLOCK;
-
-    if (max_gap_size == 0)
-    {
-        memory_map[max_gap_index].process_id = process_id;
-        return memory_map[max_gap_index];
-    }
 
     return insert_memory(memory_map, max_gap_index, map_cnt, request_size, process_id);
 }
