@@ -46,8 +46,8 @@ struct MEMORY_BLOCK best_fit_allocate(int request_size, struct MEMORY_BLOCK memo
         hasSpace = 1;
 
         if (current_gap == 0) {
-            memory_map[current_gap].process_id = process_id;
-            return memory_map[current_gap];
+            memory_map[i].process_id = process_id;
+            return memory_map[i];
         }
 
         if (i == 0)
@@ -124,10 +124,10 @@ struct MEMORY_BLOCK worst_fit_allocate(int request_size, struct MEMORY_BLOCK mem
         hasSpace = 1;
 
         if (current_gap == 0) {
-            memory_map[current_gap].process_id = process_id;
-            return memory_map[current_gap];
+            memory_map[i].process_id = process_id;
+            return memory_map[i];
         }
-        
+
         if (i == 0)
         {
             max_gap_index = 0;
