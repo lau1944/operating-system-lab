@@ -19,7 +19,7 @@ void remove_memory_from_map(struct MEMORY_BLOCK memory_map[MAPMAX], int target_i
 //     insert_memory(memory_map, 0, &size, 9, 32);
 //     for (int i = 0; i < 2; i++)
 //     {
-//         printf("%d \n", memory_map[i].end_address);
+//         printf("%d \n", memory_map[i].start_address);
 //     }
 // }
 
@@ -210,7 +210,7 @@ struct MEMORY_BLOCK insert_memory(struct MEMORY_BLOCK memory_map[MAPMAX], int ta
     int origin_end_address = memory_map[target_index].end_address;
     int origin_process_id = memory_map[target_index].process_id;
     int origin_size = memory_map[target_index].segment_size;
-    memory_map[target_index].end_address = memory_map[target_index].start_address + target_memory_size;
+    memory_map[target_index].end_address = memory_map[target_index].start_address + target_memory_size - 1;
     memory_map[target_index].process_id = process_id;
     memory_map[target_index].segment_size = target_memory_size;
 
