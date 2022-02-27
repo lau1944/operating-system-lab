@@ -177,6 +177,7 @@ void release_memory(struct MEMORY_BLOCK freed_block, struct MEMORY_BLOCK memory_
     if (freed_index > 0 && memory_map[freed_index - 1].process_id == 0 && memory_map[freed_index + 1].process_id == 0)
     {
         memory_map[freed_index - 1].end_address = memory_map[freed_index + 1].end_address;
+        memory_map[freed_index - 1].segment_size = memory_map[freed_index - 1].end_address - memory_map[freed_index - 1].start_address + 1;
         remove_memory_from_map(memory_map, freed_index, map_cnt, 2);
         return;
     }
@@ -184,13 +185,15 @@ void release_memory(struct MEMORY_BLOCK freed_block, struct MEMORY_BLOCK memory_
     if (freed_index > 0 && memory_map[freed_index - 1].process_id == 0)
     {
         memory_map[freed_index - 1].end_address = freed_block.end_address;
+        memory_map[freed_index - 1].segment_size = memory_map[freed_index - 1].end_address - memory_map[freed_index - 1].start_address + 1;
         remove_memory_from_map(memory_map, freed_index, map_cnt, 1);
         return;
     }
 
     if (memory_map[freed_index + 1].process_id == 0)
     {
-        memory_map[freed_index + 1].start_address = freed_block.start_address;
+        memory_map[freed_index + 1].start_address = memory_map[freed_index].start_address;
+        memory_map[freed_index + 1].segment_size = memory_map[freed_index + 1].end_address - memory_map[freed_index].start_address + 1;
         remove_memory_from_map(memory_map, freed_index, map_cnt, 1);
         return;
     }
