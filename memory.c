@@ -11,26 +11,29 @@ void remove_memory_from_map(struct MEMORY_BLOCK memory_map[MAPMAX], int target_i
 // int main()
 // {
 //     int size = 1;
-//     struct MEMORY_BLOCK first = {0, 1023, 1024, 1};
+//     struct MEMORY_BLOCK first = {0, 1023, 1024, 0};
 //     //struct MEMORY_BLOCK second = {16, 22, 7, 0};
 //     //struct MEMORY_BLOCK third = {23, 27, 5, 3};
 //     struct MEMORY_BLOCK memory_map[MAPMAX] = {first};
 //     struct MEMORY_BLOCK inserted = {0, 9, 10, 32};
-//     insert_memory(memory_map, 0, &size, 9, 32);
-//     for (int i = 0; i < 2; i++)
+//     struct MEMORY_BLOCK new_block = best_fit_allocate(10, memory_map, &size, 32);
+//     //insert_memory(memory_map, 0, &size, 9, 32);
+//     for (int i = 0; i < 5; i++)
 //     {
 //         printf("%d \n", memory_map[i].start_address);
 //     }
+//     //printf("%d", new_block.process_id);
 // }
 
 struct MEMORY_BLOCK best_fit_allocate(int request_size, struct MEMORY_BLOCK memory_map[MAPMAX], int *map_cnt, int process_id)
 {
     int memory_size = *map_cnt;
     if (memory_size == 0)
-        return NULLBLOCK; 
+        return NULLBLOCK;
 
-    int *min_gap_size = NULL;
+    int min_gap_size;
     int min_gap_index;
+    int hasSpace = 0;
     // Find the smallest gap
     for (int i = 0; i < memory_size; ++i)
     {
@@ -42,23 +45,24 @@ struct MEMORY_BLOCK best_fit_allocate(int request_size, struct MEMORY_BLOCK memo
         if (current_gap < 0)
             continue;
 
+        hasSpace = 1;
         if (i == 0)
         {
             min_gap_index = 0;
-            *min_gap_size = current_gap;
+            min_gap_size = current_gap;
         }
-        else if (current_gap < *min_gap_size)
+        else if (current_gap < min_gap_size)
         {
             min_gap_index = i;
-            *min_gap_size = current_gap;
+            min_gap_size = current_gap;
         }
     }
 
     // Cannot find space
-    if (min_gap_size == NULL)
+    if (!hasSpace)
         return NULLBLOCK;
 
-    if (*min_gap_size == 0)
+    if (min_gap_size == 0)
     {
         memory_map[min_gap_index].process_id = process_id;
         return memory_map[min_gap_index];
@@ -74,20 +78,24 @@ struct MEMORY_BLOCK first_fit_allocate(int request_size, struct MEMORY_BLOCK mem
         return NULLBLOCK;
 
     int space_index = -1;
-    for (int i = 0; i < memory_size; ++i) {
+    for (int i = 0; i < memory_size; ++i)
+    {
         // It has been occupied
         if (memory_map[i].process_id != 0)
             continue;
         int current_gap = memory_map[i].segment_size - request_size;
-        if (current_gap >= 0) {
+        if (current_gap >= 0)
+        {
             space_index = i;
             break;
         }
     }
 
-    if (space_index == -1) return NULLBLOCK;        
+    if (space_index == -1)
+        return NULLBLOCK;
 
-    if (memory_map[space_index].segment_size == request_size) {
+    if (memory_map[space_index].segment_size == request_size)
+    {
         memory_map[space_index].process_id = process_id;
         return memory_map[space_index];
     }
@@ -101,8 +109,9 @@ struct MEMORY_BLOCK worst_fit_allocate(int request_size, struct MEMORY_BLOCK mem
     if (memory_size == 0)
         return NULLBLOCK;
 
-    int *max_gap_size;
+    int max_gap_size;
     int max_gap_index;
+    int hasSpace = 0;
     // Find the smallest gap
     for (int i = 0; i < memory_size; ++i)
     {
@@ -114,29 +123,30 @@ struct MEMORY_BLOCK worst_fit_allocate(int request_size, struct MEMORY_BLOCK mem
         if (current_gap < 0)
             continue;
 
+        hasSpace = 1;
         if (i == 0)
         {
             max_gap_index = 0;
-            *max_gap_size = current_gap;
+            max_gap_size = current_gap;
         }
-        else if (current_gap > *max_gap_size)
+        else if (current_gap > max_gap_size)
         {
             max_gap_index = i;
-            *max_gap_size = current_gap;
+            max_gap_size = current_gap;
         }
     }
 
     // Cannot find space
-    if (max_gap_size == NULL)
+    if (!hasSpace)
         return NULLBLOCK;
 
-    if (*max_gap_size == 0)
+    if (max_gap_size == 0)
     {
         memory_map[max_gap_index].process_id = process_id;
         return memory_map[max_gap_index];
     }
 
-    return insert_memory(memory_map, max_gap_index, map_cnt, request_size, process_id);    
+    return insert_memory(memory_map, max_gap_index, map_cnt, request_size, process_id);
 }
 
 struct MEMORY_BLOCK next_fit_allocate(int request_size, struct MEMORY_BLOCK memory_map[MAPMAX], int *map_cnt, int process_id, int last_address)
@@ -146,19 +156,23 @@ struct MEMORY_BLOCK next_fit_allocate(int request_size, struct MEMORY_BLOCK memo
         return NULLBLOCK;
 
     int space_index = -1;
-    for (int i = 0; i < memory_size; ++i) {
+    for (int i = 0; i < memory_size; ++i)
+    {
         // It has been occupied
         if (memory_map[i].process_id != 0)
             continue;
         int current_gap = memory_map[i].segment_size - request_size;
-        if (current_gap >= 0 && memory_map[i].start_address >= last_address) {
+        if (current_gap >= 0 && memory_map[i].start_address >= last_address)
+        {
             space_index = i;
         }
-    }       
+    }
 
-    if (space_index == -1) return NULLBLOCK; 
+    if (space_index == -1)
+        return NULLBLOCK;
 
-    if (memory_map[space_index].segment_size == request_size) {
+    if (memory_map[space_index].segment_size == request_size)
+    {
         memory_map[space_index].process_id = process_id;
         return memory_map[space_index];
     }
