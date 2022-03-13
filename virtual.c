@@ -159,7 +159,7 @@ int process_page_access_lru(struct PTE page_table[TABLEMAX], int *table_cnt, int
         {
             if (page_table[i].is_valid == 1)
             {
-                if (target_page_index == -1 || page_table[target_page_index].arrival_timestamp > page_table[i].arrival_timestamp)
+                if (target_page_index == -1 || page_table[target_page_index].last_access_timestamp > page_table[i].last_access_timestamp)
                 {
                     target_page_index = i;
                 }
@@ -265,7 +265,7 @@ int process_page_access_lfu(struct PTE page_table[TABLEMAX], int *table_cnt, int
     }
     else
     {
-        int smallest_ref_count = -1;
+        int smallest_ref_count = -100;
         int target_page_index = -1;
         for (int i = 0; i < *table_cnt; ++i)
         {
@@ -276,7 +276,7 @@ int process_page_access_lfu(struct PTE page_table[TABLEMAX], int *table_cnt, int
                     target_page_index = i;
                     continue;
                 }
-                if (smallest_ref_count < page_table[i].reference_count || (smallest_ref_count == page_table[i].reference_count && page_table[target_page_index].arrival_timestamp <= page_table[i].arrival_timestamp))
+                if (smallest_ref_count < page_table[i].reference_count || (smallest_ref_count == page_table[i].reference_count && page_table[target_page_index].arrival_timestamp < page_table[i].arrival_timestamp))
                     continue;
 
                 smallest_ref_count = page_table[i].reference_count;
