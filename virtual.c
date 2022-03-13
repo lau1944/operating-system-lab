@@ -135,7 +135,6 @@ int count_page_faults_fifo(struct PTE page_table[TABLEMAX], int table_cnt, int r
                 page_table[target_page_index].arrival_timestamp = 0;
                 page_table[target_page_index].last_access_timestamp = 0;
                 page_table[target_page_index].reference_count = 0;
-                page_table[target_page_index].frame_number = 0;
 
                 struct PTE new_PTE = {
                     .is_valid = 1,
@@ -215,7 +214,6 @@ int count_page_faults_lru(struct PTE page_table[TABLEMAX], int table_cnt, int re
         {
             page_table[current_ref].last_access_timestamp = current_timestamp;
             page_table[current_ref].reference_count++;
-            current_timestamp++;
         }
         else
         {
@@ -238,7 +236,7 @@ int count_page_faults_lru(struct PTE page_table[TABLEMAX], int table_cnt, int re
                 {
                     if (page_table[j].is_valid == 1)
                     {
-                        if (target_page_index == -1 || page_table[target_page_index].arrival_timestamp > page_table[j].arrival_timestamp)
+                        if (target_page_index == -1 || page_table[target_page_index].last_access_timestamp > page_table[j].last_access_timestamp)
                         {
                             target_page_index = j;
                         }
@@ -249,7 +247,6 @@ int count_page_faults_lru(struct PTE page_table[TABLEMAX], int table_cnt, int re
                 page_table[target_page_index].arrival_timestamp = 0;
                 page_table[target_page_index].last_access_timestamp = 0;
                 page_table[target_page_index].reference_count = 0;
-                page_table[target_page_index].frame_number = 0;
 
                 struct PTE new_PTE = {
                     .is_valid = 1,
@@ -260,6 +257,7 @@ int count_page_faults_lru(struct PTE page_table[TABLEMAX], int table_cnt, int re
                 page_table[current_ref] = new_PTE;
             }
         }
+        current_timestamp++;
     }
     return total_page_faults;
 }
@@ -341,7 +339,6 @@ int count_page_faults_lfu(struct PTE page_table[TABLEMAX], int table_cnt, int re
         {
             page_table[current_ref].last_access_timestamp = current_timestamp;
             page_table[current_ref].reference_count++;
-            current_timestamp++;
         }
         else
         {
@@ -359,7 +356,6 @@ int count_page_faults_lfu(struct PTE page_table[TABLEMAX], int table_cnt, int re
             }
             else
             {
-                int smallest_ref_count;
                 int target_page_index = -1;
                 for (int j = 0; j < table_cnt; ++j)
                 {
@@ -368,17 +364,14 @@ int count_page_faults_lfu(struct PTE page_table[TABLEMAX], int table_cnt, int re
                         if (target_page_index == -1)
                         {
                             target_page_index = j;
-                            smallest_ref_count = page_table[j].reference_count;
                             continue;
                         }
-                        if (smallest_ref_count > page_table[j].reference_count)
+                        if (page_table[target_page_index].reference_count > page_table[j].reference_count)
                         {
-                            smallest_ref_count = page_table[j].reference_count;
                             target_page_index = j;
                         }
-                        else if (smallest_ref_count == page_table[j].reference_count && page_table[target_page_index].arrival_timestamp > page_table[j].arrival_timestamp)
+                        else if (page_table[target_page_index].reference_count == page_table[j].reference_count && page_table[target_page_index].arrival_timestamp > page_table[j].arrival_timestamp)
                         {
-                            smallest_ref_count = page_table[j].reference_count;
                             target_page_index = j;
                         }
                     }
@@ -388,7 +381,6 @@ int count_page_faults_lfu(struct PTE page_table[TABLEMAX], int table_cnt, int re
                 page_table[target_page_index].arrival_timestamp = 0;
                 page_table[target_page_index].last_access_timestamp = 0;
                 page_table[target_page_index].reference_count = 0;
-                page_table[target_page_index].frame_number = 0;
 
                 struct PTE new_PTE = {
                     .is_valid = 1,
@@ -399,6 +391,7 @@ int count_page_faults_lfu(struct PTE page_table[TABLEMAX], int table_cnt, int re
                 page_table[current_ref] = new_PTE;
             }
         }
+        current_timestamp++;
     }
     return total_page_faults;
 }
