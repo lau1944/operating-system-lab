@@ -365,11 +365,10 @@ int count_page_faults_lfu(struct PTE page_table[TABLEMAX], int table_cnt, int re
                         {
                             target_page_index = j;
                         }
-                        else if (page_table[target_page_index].reference_count > page_table[j].reference_count) {
+                        else if (page_table[target_page_index].reference_count >= page_table[j].reference_count) {
                             target_page_index = j;
                         }
-                        // }
-                        // else if ((page_table[target_page_index].reference_count == page_table[j].reference_count && page_table[target_page_index].arrival_timestamp >= page_table[j].arrival_timestamp)) {
+                        // else if (page_table[target_page_index].reference_count == page_table[j].reference_count && page_table[target_page_index].arrival_timestamp >= page_table[j].arrival_timestamp) {
                         //     target_page_index = j;
                         // }
                     }
