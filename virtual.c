@@ -3,25 +3,33 @@
 #include <stdio.h>
 #define DUMB_TIMESTAMP -100
 
-// int main()
-// {
-//     struct PTE p1 = {
-//         -1, -1, -1, -1, -1};
-//     struct PTE p2 = {
-//         -1, -1, -1, -1, -1};
-//     struct PTE p3 = {
-//         -1, -1, -1, -1, -1};
-//     struct PTE p4 = {
-//         -1, -1, -1, -1, -1};
-//     int table_cnt = 4;
-//     int frame_cnt = 2;
-//     int ref_cnt = 6;
-//     struct PTE ptes[TABLEMAX] = {p1, p2, p3, p4};
-//     int ref_str[REFERENCEMAX] = {0, 3, 2, 3, 2, 3};
-//     int frame_pool[POOLMAX] = {3, 2};
-//     int faults = count_page_faults_fifo(ptes, table_cnt, ref_str, ref_cnt, frame_pool, frame_cnt);
-//     printf("%d", faults);
-// }
+int main()
+{
+    struct PTE p1 = {
+        -1, -1, -1, -1, -1};
+    struct PTE p2 = {
+        -1, -1, -1, -1, -1};
+    struct PTE p3 = {
+        -1, -1, -1, -1, -1};
+    struct PTE p4 = {
+        -1, -1, -1, -1, -1};
+    struct PTE p5 = {
+        -1, -1, -1, -1, -1};
+    struct PTE p6 = {
+        -1, -1, -1, -1, -1};
+    struct PTE p7 = {
+        -1, -1, -1, -1, -1};
+    struct PTE p8 = {
+        -1, -1, -1, -1, -1};
+    int table_cnt = 8;
+    int frame_cnt = 3;
+    int ref_cnt = 11;
+    struct PTE ptes[TABLEMAX] = {p1, p2, p3, p4, p5, p6, p7, p8};
+    int ref_str[REFERENCEMAX] = {0, 3, 2, 6, 3, 4, 5, 2, 4, 5, 6};
+    int frame_pool[POOLMAX] = {0, 1, 2};
+    int faults = count_page_faults_fifo(ptes, table_cnt, ref_str, ref_cnt, frame_pool, frame_cnt);
+    printf("%d", faults);
+}
 
 int poll(int frame_pool[POOLMAX], int frame_cnt);
 
@@ -116,7 +124,7 @@ int count_page_faults_fifo(struct PTE page_table[TABLEMAX], int table_cnt, int r
                             target_page_index = j;
                             continue;
                         }
-                        else if (page_table[target_page_index].arrival_timestamp > page_table[i].arrival_timestamp)
+                        else if (page_table[target_page_index].arrival_timestamp > page_table[j].arrival_timestamp)
                         {
                             target_page_index = j;
                         }
