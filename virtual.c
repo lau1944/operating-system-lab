@@ -3,25 +3,25 @@
 #include <stdio.h>
 #define DUMB_TIMESTAMP -100
 
-int main()
-{
-    struct PTE p1 = {
-        -1, -1, -1, -1, -1};
-    struct PTE p2 = {
-        -1, -1, -1, -1, -1};
-    struct PTE p3 = {
-        -1, -1, -1, -1, -1};
-    struct PTE p4 = {
-        -1, -1, -1, -1, -1};
-    int table_cnt = 4;
-    int frame_cnt = 2;
-    int ref_cnt = 6;
-    struct PTE ptes[TABLEMAX] = {p1, p2, p3, p4};
-    int ref_str[REFERENCEMAX] = {0, 3, 2, 3, 2, 3};
-    int frame_pool[POOLMAX] = {3, 2};
-    int faults = count_page_faults_fifo(ptes, table_cnt, ref_str, ref_cnt, frame_pool, frame_cnt);
-    printf("%d", faults);
-}
+// int main()
+// {
+//     struct PTE p1 = {
+//         -1, -1, -1, -1, -1};
+//     struct PTE p2 = {
+//         -1, -1, -1, -1, -1};
+//     struct PTE p3 = {
+//         -1, -1, -1, -1, -1};
+//     struct PTE p4 = {
+//         -1, -1, -1, -1, -1};
+//     int table_cnt = 4;
+//     int frame_cnt = 2;
+//     int ref_cnt = 6;
+//     struct PTE ptes[TABLEMAX] = {p1, p2, p3, p4};
+//     int ref_str[REFERENCEMAX] = {0, 3, 2, 3, 2, 3};
+//     int frame_pool[POOLMAX] = {3, 2};
+//     int faults = count_page_faults_fifo(ptes, table_cnt, ref_str, ref_cnt, frame_pool, frame_cnt);
+//     printf("%d", faults);
+// }
 
 int poll(int frame_pool[POOLMAX], int frame_cnt);
 
