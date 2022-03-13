@@ -352,7 +352,7 @@ int count_page_faults_lfu(struct PTE page_table[TABLEMAX], int table_cnt, int re
                 page_table[current_ref].frame_number = frame_number;
                 page_table[current_ref].last_access_timestamp = current_timestamp;
                 page_table[current_ref].arrival_timestamp = current_timestamp;
-                page_table[current_ref].reference_count++;
+                page_table[current_ref].reference_count = 1;
             }
             else
             {
