@@ -8,15 +8,19 @@
 //     struct PTE p1 = {
 //         -1, -1, -1, -1, -1};
 //     struct PTE p2 = {
-//         1, 10, 3, 3, 1};
+//         -1, -1, -1, -1, -1};
 //     struct PTE p3 = {
-//         1, 30, 1, 1, 1};
-//     int table_cnt = 3;
-//     int frame_cnt = 0;
-//     struct PTE ptes[TABLEMAX] = {p1, p2, p3};
-//     int frame_pool[POOLMAX];
-//     int frame = process_page_access_lfu(ptes, &table_cnt, 0, frame_pool, &frame_cnt, 30);
-//     printf("%d", frame);
+//         -1, -1, -1, -1, -1};
+//     struct PTE p4 = {
+//         -1, -1, -1, -1, -1};
+//     int table_cnt = 4;
+//     int frame_cnt = 3;
+//     int ref_cnt = 6;
+//     struct PTE ptes[TABLEMAX] = {p1, p2, p3, p4};
+//     int ref_str[REFERENCEMAX] = {0, 3, 2, 3, 2, 3};
+//     int frame_pool[POOLMAX] = {3, 1, 2};
+//     int faults = count_page_faults_fifo(ptes, table_cnt, ref_str, ref_cnt, frame_pool, frame_cnt);
+//     printf("%d", ptes[0].frame_number);
 // }
 
 int poll(int frame_pool[POOLMAX], int frame_cnt);
@@ -80,11 +84,11 @@ int count_page_faults_fifo(struct PTE page_table[TABLEMAX], int table_cnt, int r
     int current_timestamp = 1;
     for (int i = 0; i < reference_cnt; ++i)
     {
-        if (page_table[i].is_valid == 1)
+        int current_ref = refrence_string[i];
+        if (page_table[current_ref].is_valid == 1)
         {
-            int page_number = refrence_string[i];
-            page_table[page_number].last_access_timestamp = current_timestamp;
-            page_table[page_number].reference_count++;
+            page_table[current_ref].last_access_timestamp = current_timestamp;
+            page_table[current_ref].reference_count++;
             current_timestamp++;
         }
         else
@@ -95,22 +99,22 @@ int count_page_faults_fifo(struct PTE page_table[TABLEMAX], int table_cnt, int r
             {
                 int frame_number = poll(frame_pool, frame_cnt);
                 frame_cnt--;
-                page_table[i].is_valid = 1;
-                page_table[i].frame_number = frame_number;
-                page_table[i].last_access_timestamp = current_timestamp;
-                page_table[i].arrival_timestamp = current_timestamp;
-                page_table[i].reference_count = 1;
+                page_table[current_ref].is_valid = 1;
+                page_table[current_ref].frame_number = frame_number;
+                page_table[current_ref].last_access_timestamp = current_timestamp;
+                page_table[current_ref].arrival_timestamp = current_timestamp;
+                page_table[current_ref].reference_count = 1;
             }
             else
             {
                 int target_page_index = -1;
-                for (int i = 0; i < table_cnt; ++i)
+                for (int j = 0; j < table_cnt; ++i)
                 {
-                    if (page_table[i].is_valid == 1)
+                    if (page_table[j].is_valid == 1)
                     {
                         if (target_page_index == -1 || page_table[target_page_index].arrival_timestamp > page_table[i].arrival_timestamp)
                         {
-                            target_page_index = i;
+                            target_page_index = j;
                         }
                     }
                 }
@@ -127,7 +131,7 @@ int count_page_faults_fifo(struct PTE page_table[TABLEMAX], int table_cnt, int r
                     .last_access_timestamp = current_timestamp,
                     .reference_count = 1,
                     .frame_number = target_frame_number};
-                page_table[i] = new_PTE;
+                page_table[current_ref] = new_PTE;
             }
         }
     }
