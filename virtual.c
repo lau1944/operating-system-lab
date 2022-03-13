@@ -108,7 +108,7 @@ int count_page_faults_fifo(struct PTE page_table[TABLEMAX], int table_cnt, int r
                 frame_cnt--;
                 page_table[current_ref].is_valid = 1;
                 page_table[current_ref].frame_number = frame_number;
-                page_table[current_ref].last_access_timestamp = 0;
+                page_table[current_ref].last_access_timestamp = current_timestamp;
                 page_table[current_ref].arrival_timestamp = current_timestamp;
                 page_table[current_ref].reference_count = 1;
             }
@@ -124,7 +124,7 @@ int count_page_faults_fifo(struct PTE page_table[TABLEMAX], int table_cnt, int r
                             target_page_index = j;
                             continue;
                         }
-                        else if (page_table[target_page_index].arrival_timestamp > page_table[j].arrival_timestamp)
+                        else if (page_table[target_page_index].arrival_timestamp >= page_table[j].arrival_timestamp)
                         {
                             target_page_index = j;
                         }
@@ -139,7 +139,7 @@ int count_page_faults_fifo(struct PTE page_table[TABLEMAX], int table_cnt, int r
                 struct PTE new_PTE = {
                     .is_valid = 1,
                     .arrival_timestamp = current_timestamp,
-                    .last_access_timestamp =0,
+                    .last_access_timestamp = current_timestamp,
                     .reference_count = 1,
                     .frame_number = target_frame_number};
                 page_table[current_ref] = new_PTE;
