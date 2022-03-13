@@ -361,16 +361,7 @@ int count_page_faults_lfu(struct PTE page_table[TABLEMAX], int table_cnt, int re
                 {
                     if (page_table[j].is_valid == 1)
                     {
-                        if (target_page_index == -1)
-                        {
-                            target_page_index = j;
-                            continue;
-                        }
-                        if (page_table[target_page_index].reference_count > page_table[j].reference_count)
-                        {
-                            target_page_index = j;
-                        }
-                        else if (page_table[target_page_index].reference_count == page_table[j].reference_count && page_table[target_page_index].arrival_timestamp >= page_table[j].arrival_timestamp)
+                        if (target_page_index == -1 || page_table[target_page_index].reference_count >= page_table[j].reference_count || (page_table[target_page_index].reference_count == page_table[j].reference_count && page_table[target_page_index].arrival_timestamp >= page_table[j].arrival_timestamp))
                         {
                             target_page_index = j;
                         }
