@@ -276,11 +276,16 @@ int process_page_access_lfu(struct PTE page_table[TABLEMAX], int *table_cnt, int
                     target_page_index = i;
                     continue;
                 }
-                if (smallest_ref_count < page_table[i].reference_count || (smallest_ref_count == page_table[i].reference_count && page_table[target_page_index].arrival_timestamp < page_table[i].arrival_timestamp))
-                    continue;
-
-                smallest_ref_count = page_table[i].reference_count;
-                target_page_index = i;
+                if (smallest_ref_count > page_table[i].reference_count)
+                {
+                    smallest_ref_count = page_table[i].reference_count;
+                    target_page_index = i;
+                }
+                else if (smallest_ref_count == page_table[i].reference_count && page_table[target_page_index].arrival_timestamp > page_table[i].arrival_timestamp)
+                {
+                    smallest_ref_count = page_table[i].reference_count;
+                    target_page_index = i;
+                }
             }
         }
         int target_frame_number = page_table[target_page_index].frame_number;
