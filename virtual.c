@@ -265,7 +265,7 @@ int process_page_access_lfu(struct PTE page_table[TABLEMAX], int *table_cnt, int
     }
     else
     {
-        int smallest_ref_count = -100;
+        int smallest_ref_count;
         int target_page_index = -1;
         for (int i = 0; i < *table_cnt; ++i)
         {
@@ -274,6 +274,7 @@ int process_page_access_lfu(struct PTE page_table[TABLEMAX], int *table_cnt, int
                 if (target_page_index == -1)
                 {
                     target_page_index = i;
+                    smallest_ref_count = page_table[i].reference_count;
                     continue;
                 }
                 if (smallest_ref_count > page_table[i].reference_count)
@@ -281,7 +282,7 @@ int process_page_access_lfu(struct PTE page_table[TABLEMAX], int *table_cnt, int
                     smallest_ref_count = page_table[i].reference_count;
                     target_page_index = i;
                 }
-                else if (smallest_ref_count == page_table[i].reference_count && page_table[target_page_index].arrival_timestamp > page_table[i].arrival_timestamp)
+                else if (smallest_ref_count == page_table[i].reference_count && page_table[target_page_index].arrival_timestamp >x page_table[i].arrival_timestamp)
                 {
                     smallest_ref_count = page_table[i].reference_count;
                     target_page_index = i;
@@ -335,17 +336,27 @@ int count_page_faults_lfu(struct PTE page_table[TABLEMAX], int table_cnt, int re
             }
             else
             {
-                int smallest_ref_count = -1;
-                int target_page_index;
+                int smallest_ref_count = -100;
+                int target_page_index = -1;
                 for (int i = 0; i < table_cnt; ++i)
                 {
                     if (page_table[i].is_valid == 1)
                     {
-                        if (smallest_ref_count < page_table[i].reference_count || smallest_ref_count == page_table[i].reference_count && page_table[target_page_index].arrival_timestamp <= page_table[i].arrival_timestamp)
+                        if (target_page_index == -1)
+                        {
+                            target_page_index = i;
                             continue;
-
-                        smallest_ref_count = page_table[i].reference_count;
-                        target_page_index = i;
+                        }
+                        if (smallest_ref_count > page_table[i].reference_count)
+                        {
+                            smallest_ref_count = page_table[i].reference_count;
+                            target_page_index = i;
+                        }
+                        else if (smallest_ref_count == page_table[i].reference_count && page_table[target_page_index].arrival_timestamp > page_table[i].arrival_timestamp)
+                        {
+                            smallest_ref_count = page_table[i].reference_count;
+                            target_page_index = i;
+                        }
                     }
                 }
                 int target_frame_number = page_table[target_page_index].frame_number;
