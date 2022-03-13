@@ -1,6 +1,7 @@
 #include "oslabs.h"
 #include <stdlib.h>
 #include <stdio.h>
+#define DUMB_TIMESTAMP -100
 
 int poll(int frame_pool[POOLMAX], int *frame_cnt);
 
@@ -26,7 +27,7 @@ int process_page_access_fifo(struct PTE page_table[TABLEMAX], int *table_cnt, in
     }
     else
     {
-        int smallest_timestamp = -1;
+        int smallest_timestamp = DUMB_TIMESTAMP;
         int target_page_index;
         int first_invalid_index = -1;
         for (int i = 0; i < TABLEMAX; ++i)
@@ -89,7 +90,7 @@ int count_page_faults_fifo(struct PTE page_table[TABLEMAX], int table_cnt, int r
             }
             else
             {
-                int smallest_timestamp = -1;
+                int smallest_timestamp = DUMB_TIMESTAMP;
                 int target_page_index;
                 int first_invalid_index = -1;
                 for (int i = 0; i < TABLEMAX; ++i)
@@ -147,7 +148,7 @@ int process_page_access_lru(struct PTE page_table[TABLEMAX], int *table_cnt, int
     }
     else
     {
-        int smallest_timestamp = -1;
+        int smallest_timestamp = DUMB_TIMESTAMP;
         int target_page_index;
         int first_invalid_index = -1;
         for (int i = 0; i < TABLEMAX; ++i)
@@ -210,7 +211,7 @@ int count_page_faults_lru(struct PTE page_table[TABLEMAX], int table_cnt, int re
             }
             else
             {
-                int smallest_timestamp = -1;
+                int smallest_timestamp = DUMB_TIMESTAMP;
                 int target_page_index;
                 int first_invalid_index = -1;
                 for (int i = 0; i < TABLEMAX; ++i)
