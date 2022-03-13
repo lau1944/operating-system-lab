@@ -27,7 +27,7 @@ int process_page_access_fifo(struct PTE page_table[TABLEMAX], int *table_cnt, in
     }
     else
     {
-        int target_page_index = 0;
+        int target_page_index = -1;
         int first_invalid_index = -1;
         for (int i = 0; i < *table_cnt; ++i)
         {
@@ -36,15 +36,17 @@ int process_page_access_fifo(struct PTE page_table[TABLEMAX], int *table_cnt, in
                 first_invalid_index = i;
             }
 
-            if (page_table[i].is_valid == 1 && page_table[target_page_index].arrival_timestamp > page_table[i].arrival_timestamp)
+            if (page_table[i].is_valid == 1)
             {
-                target_page_index = i;
+                if (target_page_index == -1 || page_table[target_page_index].arrival_timestamp > page_table[i].arrival_timestamp) {
+                    target_page_index = i;
+                }
             }
         }
         int target_frame_number = page_table[target_page_index].frame_number;
         // mark invalid
         page_table[target_page_index].is_valid = 0;
-        page_table[target_page_index].frame_number = -1;
+        // page_table[target_page_index].frame_number = -1;
         page_table[target_page_index].arrival_timestamp = -1;
         page_table[target_page_index].last_access_timestamp = -1;
         page_table[target_page_index].reference_count = -1;
