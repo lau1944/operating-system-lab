@@ -19,7 +19,7 @@
 //     printf("%d", frame);
 // }
 
-int poll(int frame_pool[POOLMAX], int *frame_cnt);
+int poll(int frame_pool[POOLMAX], int frame_cnt);
 
 int process_page_access_fifo(struct PTE page_table[TABLEMAX], int *table_cnt, int page_number, int frame_pool[POOLMAX], int *frame_cnt, int current_timestamp)
 {
@@ -32,7 +32,8 @@ int process_page_access_fifo(struct PTE page_table[TABLEMAX], int *table_cnt, in
 
     if (*frame_cnt != 0)
     {
-        int frame_number = poll(frame_pool, frame_cnt);
+        int frame_number = poll(frame_pool, *frame_cnt);
+        (*frame_cnt) -= 1;
 
         page_table[page_number].is_valid = 1;
         page_table[page_number].frame_number = frame_number;
@@ -77,7 +78,7 @@ int count_page_faults_fifo(struct PTE page_table[TABLEMAX], int table_cnt, int r
 {
     int total_page_faults = 0;
     int current_timestamp = 1;
-    for (int i = 0; i < table_cnt; ++i)
+    for (int i = 0; i < reference_cnt; ++i)
     {
         if (page_table[i].is_valid == 1)
         {
@@ -92,12 +93,13 @@ int count_page_faults_fifo(struct PTE page_table[TABLEMAX], int table_cnt, int r
             total_page_faults++;
             if (frame_cnt != 0)
             {
-                int frame_number = poll(frame_pool, &frame_cnt);
+                int frame_number = poll(frame_pool, frame_cnt);
+                frame_cnt--;
                 page_table[i].is_valid = 1;
                 page_table[i].frame_number = frame_number;
                 page_table[i].last_access_timestamp = current_timestamp;
                 page_table[i].arrival_timestamp = current_timestamp;
-                page_table[i].reference_count++;
+                page_table[i].reference_count = 1;
             }
             else
             {
@@ -143,7 +145,8 @@ int process_page_access_lru(struct PTE page_table[TABLEMAX], int *table_cnt, int
 
     if (*frame_cnt != 0)
     {
-        int frame_number = poll(frame_pool, frame_cnt);
+        int frame_number = poll(frame_pool, *frame_cnt);
+        (*frame_cnt) -= 1;
 
         page_table[page_number].is_valid = 1;
         page_table[page_number].frame_number = frame_number;
@@ -203,7 +206,8 @@ int count_page_faults_lru(struct PTE page_table[TABLEMAX], int table_cnt, int re
             total_page_faults++;
             if (frame_cnt != 0)
             {
-                int frame_number = poll(frame_pool, &frame_cnt);
+                int frame_number = poll(frame_pool, frame_cnt);
+                frame_cnt--;
                 page_table[i].is_valid = 1;
                 page_table[i].frame_number = frame_number;
                 page_table[i].last_access_timestamp = current_timestamp;
@@ -254,7 +258,8 @@ int process_page_access_lfu(struct PTE page_table[TABLEMAX], int *table_cnt, int
 
     if (*frame_cnt != 0)
     {
-        int frame_number = poll(frame_pool, frame_cnt);
+        int frame_number = poll(frame_pool, *frame_cnt);
+        (*frame_cnt) -= 1;
 
         page_table[page_number].is_valid = 1;
         page_table[page_number].frame_number = frame_number;
@@ -327,7 +332,8 @@ int count_page_faults_lfu(struct PTE page_table[TABLEMAX], int table_cnt, int re
             total_page_faults++;
             if (frame_cnt != 0)
             {
-                int frame_number = poll(frame_pool, &frame_cnt);
+                int frame_number = poll(frame_pool, frame_cnt);
+                frame_cnt--;
                 page_table[i].is_valid = 1;
                 page_table[i].frame_number = frame_number;
                 page_table[i].last_access_timestamp = current_timestamp;
@@ -380,16 +386,15 @@ int count_page_faults_lfu(struct PTE page_table[TABLEMAX], int table_cnt, int re
     return total_page_faults;
 }
 
-int poll(int frame_pool[POOLMAX], int *frame_cnt)
+int poll(int frame_pool[POOLMAX], int frame_cnt)
 {
-    if (*frame_cnt == 0)
+    if (frame_cnt == 0)
         return -1;
 
     int poll_frame = frame_pool[0];
-    for (int i = 0; i < *frame_cnt - 1; ++i)
+    for (int i = 0; i < frame_cnt - 1; ++i)
     {
         frame_pool[i] = frame_pool[i + 1];
     }
-    (*frame_cnt) -= 1;
     return poll_frame;
 }
