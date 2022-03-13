@@ -27,19 +27,17 @@ int process_page_access_fifo(struct PTE page_table[TABLEMAX], int *table_cnt, in
     }
     else
     {
-        int smallest_timestamp = DUMB_TIMESTAMP;
-        int target_page_index;
+        int target_page_index = 0;
         int first_invalid_index = -1;
-        for (int i = 0; i < TABLEMAX; ++i)
+        for (int i = 0; i < *table_cnt; ++i)
         {
             if (page_table[i].is_valid == 0 && first_invalid_index == -1)
             {
                 first_invalid_index = i;
             }
 
-            if (page_table[i].is_valid == 1 && smallest_timestamp > page_table[i].arrival_timestamp)
+            if (page_table[i].is_valid == 1 && page_table[target_page_index].arrival_timestamp > page_table[i].arrival_timestamp)
             {
-                smallest_timestamp = MIN(smallest_timestamp, page_table[i].arrival_timestamp);
                 target_page_index = i;
             }
         }
@@ -93,7 +91,7 @@ int count_page_faults_fifo(struct PTE page_table[TABLEMAX], int table_cnt, int r
                 int smallest_timestamp = DUMB_TIMESTAMP;
                 int target_page_index;
                 int first_invalid_index = -1;
-                for (int i = 0; i < TABLEMAX; ++i)
+                for (int i = 0; i < table_cnt; ++i)
                 {
                     if (page_table[i].is_valid == 0 && first_invalid_index == -1)
                     {
@@ -151,7 +149,7 @@ int process_page_access_lru(struct PTE page_table[TABLEMAX], int *table_cnt, int
         int smallest_timestamp = DUMB_TIMESTAMP;
         int target_page_index;
         int first_invalid_index = -1;
-        for (int i = 0; i < TABLEMAX; ++i)
+        for (int i = 0; i < *table_cnt; ++i)
         {
             if (page_table[i].is_valid == 0 && first_invalid_index == -1)
             {
@@ -214,7 +212,7 @@ int count_page_faults_lru(struct PTE page_table[TABLEMAX], int table_cnt, int re
                 int smallest_timestamp = DUMB_TIMESTAMP;
                 int target_page_index;
                 int first_invalid_index = -1;
-                for (int i = 0; i < TABLEMAX; ++i)
+                for (int i = 0; i < table_cnt; ++i)
                 {
                     if (page_table[i].is_valid == 0 && first_invalid_index == -1)
                     {
@@ -272,7 +270,7 @@ int process_page_access_lfu(struct PTE page_table[TABLEMAX], int *table_cnt, int
         int smallest_ref_count = -1;
         int target_page_index;
         int first_invalid_index = -1;
-        for (int i = 0; i < TABLEMAX; ++i)
+        for (int i = 0; i < *table_cnt; ++i)
         {
             if (page_table[i].is_valid == 0 && first_invalid_index == -1)
             {
@@ -338,7 +336,7 @@ int count_page_faults_lfu(struct PTE page_table[TABLEMAX], int table_cnt, int re
                 int smallest_ref_count = -1;
                 int target_page_index;
                 int first_invalid_index = -1;
-                for (int i = 0; i < TABLEMAX; ++i)
+                for (int i = 0; i < table_cnt; ++i)
                 {
                     if (page_table[i].is_valid == 0 && first_invalid_index == -1)
                     {
