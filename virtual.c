@@ -281,7 +281,7 @@ int process_page_access_lfu(struct PTE page_table[TABLEMAX], int *table_cnt, int
             if (page_table[i].is_valid == 1)
             {
                 if (smallest_ref_count < page_table[i].reference_count || smallest_ref_count == page_table[i].reference_count && page_table[target_page_index].arrival_timestamp <= page_table[i].arrival_timestamp)
-                    return;
+                    continue;
 
                 smallest_ref_count = page_table[i].reference_count;
                 target_page_index = i;
@@ -347,7 +347,7 @@ int count_page_faults_lfu(struct PTE page_table[TABLEMAX], int table_cnt, int re
                     if (page_table[i].is_valid == 1)
                     {
                         if (smallest_ref_count < page_table[i].reference_count || smallest_ref_count == page_table[i].reference_count && page_table[target_page_index].arrival_timestamp <= page_table[i].arrival_timestamp)
-                            return;
+                            continue;
 
                         smallest_ref_count = page_table[i].reference_count;
                         target_page_index = i;
