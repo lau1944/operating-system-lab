@@ -27,7 +27,7 @@
 //     struct PTE ptes[TABLEMAX] = {p1, p2, p3, p4, p5, p6, p7, p8};
 //     int ref_str[REFERENCEMAX] = {0, 3, 2, 6, 3, 4, 5, 2, 4, 5, 6};
 //     int frame_pool[POOLMAX] = {0, 1, 2};
-//     int faults = count_page_faults_fifo(ptes, table_cnt, ref_str, ref_cnt, frame_pool, frame_cnt);
+//     int faults = count_page_faults_lfu(ptes, table_cnt, ref_str, ref_cnt, frame_pool, frame_cnt);
 //     printf("%d", faults);
 // }
 
@@ -364,11 +364,9 @@ int count_page_faults_lfu(struct PTE page_table[TABLEMAX], int table_cnt, int re
                         if (target_page_index == -1)
                         {
                             target_page_index = j;
-                            continue;
                         }
                         else if (page_table[target_page_index].reference_count > page_table[j].reference_count) {
                             target_page_index = j;
-                            continue;
                         }
                         else if ((page_table[target_page_index].reference_count == page_table[j].reference_count && page_table[target_page_index].arrival_timestamp >= page_table[j].arrival_timestamp)) {
                             target_page_index = j;
