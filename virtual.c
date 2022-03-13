@@ -282,7 +282,7 @@ int process_page_access_lfu(struct PTE page_table[TABLEMAX], int *table_cnt, int
                     smallest_ref_count = page_table[i].reference_count;
                     target_page_index = i;
                 }
-                else if (smallest_ref_count == page_table[i].reference_count && page_table[target_page_index].arrival_timestamp >x page_table[i].arrival_timestamp)
+                else if (smallest_ref_count == page_table[i].reference_count && page_table[target_page_index].arrival_timestamp > page_table[i].arrival_timestamp)
                 {
                     smallest_ref_count = page_table[i].reference_count;
                     target_page_index = i;
