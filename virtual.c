@@ -3,23 +3,23 @@
 #include <stdio.h>
 #define DUMB_TIMESTAMP -100
 
-// int main() {
-//     struct PTE p1 = {
-//         -1, -1, -1, -1, -1
-//     };
-//     struct PTE p2 = {
-//         1, 10, 3, 3, 1
-//     };
-//     struct PTE p3 = {
-//         1, 30, 1, 1, 1
-//     };
-//     int table_cnt = 3;
-//     int frame_cnt = 0;
-//     struct PTE ptes[TABLEMAX] = {p1, p2, p3};
-//     int frame_pool[POOLMAX];
-//     int frame = process_page_access_fifo(ptes, &table_cnt, 0, frame_pool, &frame_cnt, 30);
-//     printf("%d", frame);
-// }
+int main() {
+    struct PTE p1 = {
+        -1, -1, -1, -1, -1
+    };
+    struct PTE p2 = {
+        1, 10, 3, 3, 1
+    };
+    struct PTE p3 = {
+        1, 30, 1, 1, 1
+    };
+    int table_cnt = 3;
+    int frame_cnt = 0;
+    struct PTE ptes[TABLEMAX] = {p1, p2, p3};
+    int frame_pool[POOLMAX];
+    int frame = process_page_access_fifo(ptes, &table_cnt, 0, frame_pool, &frame_cnt, 30);
+    printf("%d", ptes[2].frame_number);
+}
 
 int poll(int frame_pool[POOLMAX], int *frame_cnt);
 
@@ -40,7 +40,7 @@ int process_page_access_fifo(struct PTE page_table[TABLEMAX], int *table_cnt, in
         page_table[page_number].frame_number = frame_number;
         page_table[page_number].last_access_timestamp = current_timestamp;
         page_table[page_number].arrival_timestamp = current_timestamp;
-        page_table[page_number].reference_count += 1;
+        page_table[page_number].reference_count = 1;
         return frame_number;
     }
     else
@@ -370,6 +370,6 @@ int poll(int frame_pool[POOLMAX], int *frame_cnt)
     {
         frame_pool[i] = frame_pool[i + 1];
     }
-    *frame_cnt--;
+    (*frame_cnt) -= 1;
     return poll_frame;
 }
