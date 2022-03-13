@@ -77,7 +77,7 @@ int count_page_faults_fifo(struct PTE page_table[TABLEMAX], int table_cnt, int r
 {
     int total_page_faults = 0;
     int current_timestamp = 1;
-    for (int i = 0; i < reference_cnt; ++i)
+    for (int i = 0; i < table_cnt; ++i)
     {
         if (page_table[i].is_valid == 1)
         {
@@ -188,7 +188,7 @@ int count_page_faults_lru(struct PTE page_table[TABLEMAX], int table_cnt, int re
 {
     int total_page_faults = 0;
     int current_timestamp = 1;
-    for (int i = 0; i < reference_cnt; ++i)
+    for (int i = 0; i < table_cnt; ++i)
     {
         if (page_table[i].is_valid == 1)
         {
@@ -312,7 +312,7 @@ int count_page_faults_lfu(struct PTE page_table[TABLEMAX], int table_cnt, int re
 {
     int total_page_faults = 0;
     int current_timestamp = 1;
-    for (int i = 0; i < reference_cnt; ++i)
+    for (int i = 0; i < table_cnt; ++i)
     {
         if (page_table[i].is_valid == 1)
         {
@@ -336,7 +336,7 @@ int count_page_faults_lfu(struct PTE page_table[TABLEMAX], int table_cnt, int re
             }
             else
             {
-                int smallest_ref_count = -100;
+                int smallest_ref_count;
                 int target_page_index = -1;
                 for (int i = 0; i < table_cnt; ++i)
                 {
@@ -345,6 +345,7 @@ int count_page_faults_lfu(struct PTE page_table[TABLEMAX], int table_cnt, int re
                         if (target_page_index == -1)
                         {
                             target_page_index = i;
+                            smallest_ref_count = page_table[i].reference_count;
                             continue;
                         }
                         if (smallest_ref_count > page_table[i].reference_count)
