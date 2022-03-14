@@ -5,28 +5,28 @@
 
 // int main()
 // {
+//     struct PTE p0 = {
+//         -1, -1, -1, -1, -1};
 //     struct PTE p1 = {
 //         -1, -1, -1, -1, -1};
 //     struct PTE p2 = {
-//         -1, -1, -1, -1, -1};
+//         1, 10, 3, 3, 1};
 //     struct PTE p3 = {
 //         -1, -1, -1, -1, -1};
 //     struct PTE p4 = {
 //         -1, -1, -1, -1, -1};
 //     struct PTE p5 = {
-//         -1, -1, -1, -1, -1};
+//         1, 20, 2, 4, 2};
 //     struct PTE p6 = {
 //         -1, -1, -1, -1, -1};
 //     struct PTE p7 = {
-//         -1, -1, -1, -1, -1};
-//     struct PTE p8 = {
-//         -1, -1, -1, -1, -1};
+//         1, 30, 1, 1, 1};
 //     int table_cnt = 8;
-//     int frame_cnt = 3;
-//     int ref_cnt = 11;
-//     struct PTE ptes[TABLEMAX] = {p1, p2, p3, p4, p5, p6, p7, p8};
-//     int ref_str[REFERENCEMAX] = {0, 3, 2, 6, 3, 4, 5, 2, 4, 5, 6};
-//     int frame_pool[POOLMAX] = {0, 1, 2};
+//     int frame_cnt = 0;
+//     int ref_cnt = 12;
+//     struct PTE ptes[TABLEMAX] = {p0, p1, p2, p3, p4, p5, p6, p7};
+//     int ref_str[REFERENCEMAX] = {2,5,0,2,5,2,3,5,1,2,6,0};
+//     int frame_pool[POOLMAX] = {};
 //     int faults = count_page_faults_lfu(ptes, table_cnt, ref_str, ref_cnt, frame_pool, frame_cnt);
 //     printf("%d", faults);
 // }
@@ -335,7 +335,7 @@ int count_page_faults_lfu(struct PTE page_table[TABLEMAX], int table_cnt, int re
     for (int i = 0; i < reference_cnt; ++i)
     {
         int current_ref = refrence_string[i];
-        if (page_table[i].is_valid == 1)
+        if (page_table[current_ref].is_valid == 1)
         {
             page_table[current_ref].last_access_timestamp = current_timestamp;
             page_table[current_ref].reference_count += 1;
