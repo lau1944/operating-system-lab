@@ -338,7 +338,7 @@ int count_page_faults_lfu(struct PTE page_table[TABLEMAX], int table_cnt, int re
         if (page_table[i].is_valid == 1)
         {
             page_table[current_ref].last_access_timestamp = current_timestamp;
-            page_table[current_ref].reference_count++;
+            page_table[current_ref].reference_count += 1;
         }
         else
         {
