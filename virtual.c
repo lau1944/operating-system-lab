@@ -356,6 +356,7 @@ int count_page_faults_lfu(struct PTE page_table[TABLEMAX], int table_cnt, int re
             }
             else
             {
+                int smallest_ref_count;
                 int target_page_index = -1;
                 for (int j = 0; j < table_cnt; ++j)
                 {
@@ -364,13 +365,19 @@ int count_page_faults_lfu(struct PTE page_table[TABLEMAX], int table_cnt, int re
                         if (target_page_index == -1)
                         {
                             target_page_index = j;
+                            smallest_ref_count = page_table[j].reference_count;
+                            continue;
                         }
-                        else if (page_table[target_page_index].reference_count >= page_table[j].reference_count) {
+                        if (smallest_ref_count > page_table[j].reference_count)
+                        {
+                            smallest_ref_count = page_table[j].reference_count;
                             target_page_index = j;
                         }
-                        // else if (page_table[target_page_index].reference_count == page_table[j].reference_count && page_table[target_page_index].arrival_timestamp >= page_table[j].arrival_timestamp) {
-                        //     target_page_index = j;
-                        // }
+                        else if (smallest_ref_count == page_table[j].reference_count && page_table[target_page_index].arrival_timestamp > page_table[j].arrival_timestamp)
+                        {
+                            smallest_ref_count = page_table[j].reference_count;
+                            target_page_index = j;
+                        }
                     }
                 }
                 int target_frame_number = page_table[target_page_index].frame_number;
