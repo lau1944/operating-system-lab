@@ -168,6 +168,12 @@ struct RCB handle_request_completion_look(struct RCB request_queue[QUEUEMAX], in
         return request_queue[index];
     }
 
+    else if (target_index_size != 0) {
+        int index = find_smallest_cylinder_from_index(cylinder_dif, target_rcb_index, target_index_size);
+        remove_memory_from_queue(request_queue, index, queue_cnt);
+        return request_queue[index];
+    }
+
     // No require found, find the smallest cylinder
     int index = find_smallest_cylinder(cylinder_dif, *queue_cnt);
     remove_memory_from_queue(request_queue, index, queue_cnt);
