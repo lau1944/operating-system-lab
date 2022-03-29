@@ -123,9 +123,6 @@ struct RCB handle_request_completion_look(struct RCB request_queue[QUEUEMAX], in
 
     int buf_size = 0;
     int target_buf_index[buf_size];
-
-    struct RCB target_rcb = NULLRCB;
-    int min_arrival_time = 0;
     for (int i = 0; i < *queue_cnt; ++i)
     {
         if (current_cylinder == request_queue[i].cylinder)
