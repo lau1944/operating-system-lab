@@ -5,14 +5,14 @@
 struct RCB NULLRCB = {
     0, 0, 0, 0, 0};
 
-// int main() {
-//     int size = 1;
-//     struct RCB rcb1 = { 1, 2, 1, 1, 1 };
-//     struct RCB request_queue[QUEUEMAX];
-//     request_queue[0] = rcb1;
-//     struct RCB result = handle_request_completion_fcfs(request_queue, &size);
-//     printf("%d", result.cylinder);
-// }    
+int main() {
+    int size = 1;
+    struct RCB rcb0 = { 2, 3, 2, 2, 2 };
+    struct RCB rcb1 = { 1, 2, 1, 1, 1 };
+    struct RCB request_queue[QUEUEMAX];
+    struct RCB result = handle_request_arrival_fcfs(request_queue, &size, rcb0, rcb1, 123);
+    printf("%d", size);
+}    
 
 void addToArray(int array[], int element, int *size);
 
