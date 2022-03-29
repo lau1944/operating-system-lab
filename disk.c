@@ -5,14 +5,14 @@
 struct RCB NULLRCB = {
     0, 0, 0, 0, 0};
 
-int main() {
-    int size = 1;
-    struct RCB rcb0 = { 2, 3, 2, 2, 2 };
-    struct RCB rcb1 = { 1, 2, 1, 1, 1 };
-    struct RCB request_queue[QUEUEMAX];
-    struct RCB result = handle_request_arrival_fcfs(request_queue, &size, rcb0, rcb1, 123);
-    printf("%d", size);
-}    
+// int main() {
+//     int size = 0;
+//     struct RCB rcb0 = { 2, 3, 2, 2, 2 };
+//     struct RCB rcb1 = { 1, 2, 1, 1, 1 };
+//     struct RCB request_queue[QUEUEMAX];
+//     struct RCB result = handle_request_arrival_fcfs(request_queue, &size, rcb0, rcb1, 123);
+//     printf("%d", size);
+// }    
 
 void addToArray(int array[], int element, int *size);
 
@@ -29,7 +29,7 @@ struct RCB handle_request_arrival_fcfs(struct RCB request_queue[QUEUEMAX], int *
         return new_request;
     }
 
-    request_queue[*queue_cnt++] = new_request;
+    request_queue[(*queue_cnt)++] = new_request;
     return current_request;
 }
 
@@ -65,7 +65,7 @@ struct RCB handle_request_arrival_sstf(struct RCB request_queue[QUEUEMAX], int *
         return new_request;
     }
 
-    request_queue[*queue_cnt++] = new_request;
+    request_queue[(*queue_cnt)++] = new_request;
     return current_request;
 }
 
@@ -107,7 +107,7 @@ struct RCB handle_request_arrival_look(struct RCB request_queue[QUEUEMAX], int *
         return new_request;
     }
 
-    request_queue[*queue_cnt++] = new_request;
+    request_queue[(*queue_cnt)++] = new_request;
     return current_request;
 }
 
