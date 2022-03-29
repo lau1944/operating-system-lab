@@ -10,9 +10,9 @@ struct RCB NULLRCB = {
 //     struct RCB rcb0 = { 2, 3, 2, 2, 2 };
 //     struct RCB rcb1 = { 1, 2, 1, 1, 1 };
 //     struct RCB request_queue[QUEUEMAX];
-//     struct RCB result = handle_request_arrival_fcfs(request_queue, &size, rcb0, rcb1, 123);
+//     struct RCB result = handle_request_completion_look(request_queue);
 //     printf("%d", size);
-// }    
+// }
 
 void addToArray(int array[], int element, int *size);
 
@@ -204,7 +204,7 @@ int find_smallest_cylinder_from_index(int array[], int index[], int index_size)
 
 void addToArray(int array[], int element, int *size)
 {
-    int new_array[++*size];
+    int new_array[++(*size)];
     for (int i = 0; i < *size - 1; ++i)
     {
         new_array[i] = array[i];
