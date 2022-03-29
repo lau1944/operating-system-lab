@@ -29,7 +29,7 @@ struct RCB handle_request_arrival_fcfs(struct RCB request_queue[QUEUEMAX], int *
         return new_request;
     }
 
-    request_queue[++*queue_cnt] = new_request;
+    request_queue[*queue_cnt++] = new_request;
     return current_request;
 }
 
@@ -65,7 +65,7 @@ struct RCB handle_request_arrival_sstf(struct RCB request_queue[QUEUEMAX], int *
         return new_request;
     }
 
-    request_queue[++*queue_cnt] = new_request;
+    request_queue[*queue_cnt++] = new_request;
     return current_request;
 }
 
@@ -107,7 +107,7 @@ struct RCB handle_request_arrival_look(struct RCB request_queue[QUEUEMAX], int *
         return new_request;
     }
 
-    request_queue[++*queue_cnt] = new_request;
+    request_queue[*queue_cnt++] = new_request;
     return current_request;
 }
 
