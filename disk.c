@@ -11,6 +11,8 @@ int find_smallest_cylinder(int array[], int array_size);
 
 int find_smallest_cylinder_from_index(int array[], int index[], int index_size);
 
+void remove_memory_from_queue(struct RCB request_queue[MAPMAX], int target_index, int *queue_size);
+
 struct RCB handle_request_arrival_fcfs(struct RCB request_queue[QUEUEMAX], int *queue_cnt, struct RCB current_request, struct RCB new_request, int timestamp)
 {
     if (current_request.process_id == 0)
