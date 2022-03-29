@@ -137,6 +137,7 @@ struct RCB handle_request_completion_look(struct RCB request_queue[QUEUEMAX], in
         if (current_cylinder == request_queue[i].cylinder)
         {
             addToArray(target_rcb_index, i, &target_index_size);
+            continue;
         }
 
         if (scan_direction == 1)
