@@ -45,7 +45,7 @@ struct RCB handle_request_completion_fcfs(struct RCB request_queue[QUEUEMAX], in
     if (target_index == -1)
         return NULLRCB;
 
-    remove_memory_from_queue(request_queue, target_index, *queue_cnt);
+    remove_memory_from_queue(request_queue, target_index, queue_cnt);
     return min_arrive_rcb;
 }
 
@@ -87,7 +87,7 @@ struct RCB handle_request_completion_sstf(struct RCB request_queue[QUEUEMAX], in
         }
     }
 
-    remove_memory_from_queue(request_queue, target_index, *queue_cnt);
+    remove_memory_from_queue(request_queue, target_index, queue_cnt);
     return rcb;
 }
 
@@ -154,13 +154,13 @@ struct RCB handle_request_completion_look(struct RCB request_queue[QUEUEMAX], in
     if (target_index_size == 0 && buf_size != 0)
     {
         int index = find_smallest_cylinder_from_index(cylinder_dif, target_buf_index, buf_size);
-        remove_memory_from_queue(request_queue, index, *queue_cnt);
+        remove_memory_from_queue(request_queue, index, queue_cnt);
         return request_queue[index];
     }
 
     // No require found, find the smallest cylinder
     int index = find_smallest_cylinder(cylinder_dif, *queue_cnt);
-    remove_memory_from_queue(request_queue, index, *queue_cnt);
+    remove_memory_from_queue(request_queue, index, queue_cnt);
     return request_queue[index];
 }
 
