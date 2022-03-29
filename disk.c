@@ -127,6 +127,7 @@ struct RCB handle_request_completion_look(struct RCB request_queue[QUEUEMAX], in
         cylinder_dif[i] = abs(request_queue[i].cylinder - current_cylinder);
     }
 
+    int has_same_cylinder = 0;
     int target_index_size = 0;
     int target_rcb_index[target_index_size];
 
@@ -136,9 +137,12 @@ struct RCB handle_request_completion_look(struct RCB request_queue[QUEUEMAX], in
     {
         if (current_cylinder == request_queue[i].cylinder)
         {
+            has_same_cylinder = 1;
             addToArray(target_rcb_index, i, &target_index_size);
             continue;
         }
+
+        if (has_same_cylinder) continue;
 
         if (scan_direction == 1)
         {
