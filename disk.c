@@ -5,6 +5,15 @@
 struct RCB NULLRCB = {
     0, 0, 0, 0, 0};
 
+// int main() {
+//     int size = 1;
+//     struct RCB rcb1 = { 1, 2, 1, 1, 1 };
+//     struct RCB request_queue[QUEUEMAX];
+//     request_queue[0] = rcb1;
+//     struct RCB result = handle_request_completion_fcfs(request_queue, &size);
+//     printf("%d", result.cylinder);
+// }    
+
 void addToArray(int array[], int element, int *size);
 
 int find_smallest_cylinder(int array[], int array_size);
@@ -31,9 +40,9 @@ struct RCB handle_request_completion_fcfs(struct RCB request_queue[QUEUEMAX], in
         return NULLRCB;
     }
 
-    struct RCB min_arrive_rcb = NULLRCB;
-    int target_index = -1;
-    for (int i = 0; i < *queue_cnt; ++i)
+    struct RCB min_arrive_rcb = request_queue[0];
+    int target_index = 0;
+    for (int i = 1; i < *queue_cnt; ++i)
     {
         if (request_queue[i].arrival_timestamp < min_arrive_rcb.arrival_timestamp)
         {
