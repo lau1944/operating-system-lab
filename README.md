@@ -13,6 +13,7 @@ A operating system school project repo
 
 * [ Project 5 : Virutal Memory](https://github.com/lau1944/os_uni_project/tree/virtual_memory)
 
+* [ Project 6 : Disk Schedule](https://github.com/lau1944/os_uni_project/tree/disk_schedule)
 
 # How to run
 
