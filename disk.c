@@ -5,19 +5,19 @@
 struct RCB NULLRCB = {
     0, 0, 0, 0, 0};
 
-int main()
-{
-    int size = 3;
-    struct RCB rcb0 = {1, 52, 57, 58, 1};
-    struct RCB rcb1 = {2, 51, 58, 58, 2};
-    struct RCB rcb2 = {3, 53, 59, 58, 3};
-    struct RCB request_queue[QUEUEMAX];
-    request_queue[0] = rcb0;
-    request_queue[1] = rcb1;
-    request_queue[2] = rcb2;
-    struct RCB result = handle_request_completion_look(request_queue, &size, 56, 0);
-    printf("%d", result.request_id);
-}
+// int main()
+// {
+//     int size = 3;
+//     struct RCB rcb0 = {1, 52, 57, 58, 1};
+//     struct RCB rcb1 = {2, 51, 58, 58, 2};
+//     struct RCB rcb2 = {3, 53, 59, 58, 3};
+//     struct RCB request_queue[QUEUEMAX];
+//     request_queue[0] = rcb0;
+//     request_queue[1] = rcb1;
+//     request_queue[2] = rcb2;
+//     struct RCB result = handle_request_completion_look(request_queue, &size, 60, 1);
+//     printf("%d", result.request_id);
+// }
 
 void addToArray(int array[], int element, int *size);
 
