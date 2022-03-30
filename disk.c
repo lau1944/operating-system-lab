@@ -5,21 +5,21 @@
 struct RCB NULLRCB = {
     0, 0, 0, 0, 0};
 
-// int main()
-// {
-//     int size = 3;
-//     struct RCB rcb0 = {1, 52, 57, 58, 1};
-//     struct RCB rcb1 = {2, 51, 58, 58, 2};
-//     struct RCB rcb2 = {3, 53, 59, 58, 3};
-//     struct RCB request_queue[QUEUEMAX];
-//     request_queue[0] = rcb0;
-//     request_queue[1] = rcb1;
-//     request_queue[2] = rcb2;
-//     struct RCB result = handle_request_completion_look(request_queue, &size, 56, 1);
-//     printf("%d", result.request_id);
-// }
+int main()
+{
+    int size = 3;
+    struct RCB rcb0 = {1, 52, 57, 58, 1};
+    struct RCB rcb1 = {2, 51, 58, 58, 2};
+    struct RCB rcb2 = {3, 53, 59, 58, 3};
+    struct RCB request_queue[QUEUEMAX];
+    request_queue[0] = rcb0;
+    request_queue[1] = rcb1;
+    request_queue[2] = rcb2;
+    struct RCB result = handle_request_completion_look(request_queue, &size, 56, 1);
+    printf("%d", result.request_id);
+}
 
-void addToArray(int (*array)[], int element, int *size);
+void addToArray(int array[], int element, int *size);
 
 int find_smallest_cylinder(int array[], int array_size);
 
@@ -221,10 +221,10 @@ int find_smallest_cylinder_from_index(int array[], int index[], int index_size)
     return target_index;
 }
 
-void addToArray(int (*array)[], int element, int *size)
+void addToArray(int array[], int element, int *size)
 {
     array = realloc(array, sizeof(int) * (++(*size)));
-    (*array)[*size - 1] = element;
+    array[*size - 1] = element;
     // int new_array[++(*size)];
     // for (int i = 0; i < *size - 1; ++i)
     // {
