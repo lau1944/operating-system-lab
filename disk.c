@@ -15,7 +15,7 @@ int main()
     request_queue[0] = rcb0;
     request_queue[1] = rcb1;
     request_queue[2] = rcb2;
-    struct RCB result = handle_request_completion_look(request_queue, &size, 56, 1);
+    struct RCB result = handle_request_completion_look(request_queue, &size, 56, 0);
     printf("%d", result.request_id);
 }
 
