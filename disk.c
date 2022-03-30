@@ -15,7 +15,7 @@ struct RCB NULLRCB = {
 //     request_queue[0] = rcb0;
 //     request_queue[1] = rcb1;
 //     request_queue[2] = rcb2;
-//     struct RCB result = handle_request_completion_look(request_queue, &size, 60, 1);
+//     struct RCB result = handle_request_completion_look(request_queue, &size, 58, 1);
 //     printf("%d", result.request_id);
 // }
 
