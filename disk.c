@@ -15,11 +15,11 @@ struct RCB NULLRCB = {
 //     request_queue[0] = rcb0;
 //     request_queue[1] = rcb1;
 //     request_queue[2] = rcb2;
-//     struct RCB result = handle_request_completion_look(request_queue, &size, 59, 1);
+//     struct RCB result = handle_request_completion_look(request_queue, &size, 56, 1);
 //     printf("%d", result.request_id);
 // }
 
-void addToArray(int array[], int element, int *size);
+void addToArray(int (*array)[], int element, int *size);
 
 int find_smallest_cylinder(int array[], int array_size);
 
@@ -133,23 +133,23 @@ struct RCB handle_request_completion_look(struct RCB request_queue[QUEUEMAX], in
     }
 
     int target_index_size = 0;
-    int target_rcb_index[target_index_size];
+    int* rcb_index_pointer = malloc(sizeof(int) * target_index_size);
 
     int buf_size = 0;
-    int target_buf_index[buf_size];
+    int* buf_index_pointer = malloc(sizeof(int) * buf_size);
 
     // find same cylinder
     for (int i = 0; i < *queue_cnt; ++i)
     {
         if (current_cylinder == request_queue[i].cylinder)
         {
-            addToArray(target_rcb_index, i, &target_index_size);
+            addToArray(rcb_index_pointer, i, &target_index_size);
         }
     }
 
     if (target_index_size != 0)
     {
-        int index = find_smallest_cylinder_from_index(cylinder_dif, target_rcb_index, target_index_size);
+        int index = find_smallest_cylinder_from_index(cylinder_dif, rcb_index_pointer, target_index_size);
         return remove_memory_from_queue(request_queue, index, queue_cnt);
     }
 
@@ -159,7 +159,7 @@ struct RCB handle_request_completion_look(struct RCB request_queue[QUEUEMAX], in
         {
             if (current_cylinder < request_queue[i].cylinder)
             {
-                addToArray(target_rcb_index, i, &target_index_size);
+                addToArray(rcb_index_pointer, i, &target_index_size);
             }
         }
 
@@ -167,24 +167,24 @@ struct RCB handle_request_completion_look(struct RCB request_queue[QUEUEMAX], in
         {
             if (current_cylinder > request_queue[i].cylinder)
             {
-                addToArray(target_rcb_index, i, &target_index_size);
+                addToArray(rcb_index_pointer, i, &target_index_size);
             }
             else
             {
-                addToArray(target_buf_index, i, &buf_size);
+                addToArray(buf_index_pointer, i, &buf_size);
             }
         }
     }
 
     if (target_index_size == 0 && buf_size != 0)
     {
-        int index = find_smallest_cylinder_from_index(cylinder_dif, target_buf_index, buf_size);
+        int index = find_smallest_cylinder_from_index(cylinder_dif, buf_index_pointer, buf_size);
         return remove_memory_from_queue(request_queue, index, queue_cnt);
     }
 
     else if (target_index_size != 0)
     {
-        int index = find_smallest_cylinder_from_index(cylinder_dif, target_rcb_index, target_index_size);
+        int index = find_smallest_cylinder_from_index(cylinder_dif, rcb_index_pointer, target_index_size);
         return remove_memory_from_queue(request_queue, index, queue_cnt);
     }
 
@@ -221,14 +221,19 @@ int find_smallest_cylinder_from_index(int array[], int index[], int index_size)
     return target_index;
 }
 
-void addToArray(int array[], int element, int *size)
+void addToArray(int (*array)[], int element, int *size)
 {
-    int new_array[++(*size)];
-    for (int i = 0; i < *size - 1; ++i)
-    {
-        new_array[i] = array[i];
-    }
-    new_array[*size - 1] = element;
+    array = realloc(array, sizeof(int) * (++(*size)));
+    (*array)[*size - 1] = element;
+    // int new_array[++(*size)];
+    // for (int i = 0; i < *size - 1; ++i)
+    // {
+    //     new_array[i] = (*array)[i];
+    // }
+    // new_array[*size - 1] = element;
+    // int (*pointer)[*size];
+    // pointer = &new_array;
+    // return pointer;
 }
 
 struct RCB remove_memory_from_queue(struct RCB request_queue[MAPMAX], int target_index, int *queue_size)
